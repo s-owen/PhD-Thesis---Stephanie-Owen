@@ -1,0 +1,41 @@
+%!TEX root = ../thesis.tex
+% ******************************* Thesis Appendix A ********************************
+
+\chapter{Probability Density}
+ The probability density function is the function that gives the probability of a particular value occurring. $P(x)=f(x)$
+ 
+And the equivalent form that all probabilities sum to 1 is the following equation:
+\begin{equation}
+    \int_{-\infty}^{\infty}f(x)dx = 1
+\end{equation}
+
+The expected or mean value of x is 
+\begin{equation}
+   \bar{x}= \int_{-\infty}^{\infty}xf(x)dx
+\end{equation}
+
+In 2D when we analyse a point distribution with a constant probability of a point occurring, the point density $k$, the probability density function is the following;
+
+\begin{equation}
+  f(r)=k
+\end{equation}
+
+When we integrate this in radial coordinates over a circular area with radius $R$;
+\begin{equation}
+  \int_0^\infty k.2\pi r.dr = \int_0^R k.2\pi r.dr = 1
+\end{equation}
+
+\begin{equation}
+k. \pi R^2 = 1 
+\end{equation}
+
+\begin{equation}
+    k=\frac{1}{\pi R^2}
+\end{equation}
+The probability $k$ of finding a point at radius, $r$, is $\frac{1}{\pi R^2}$. 
+The probability of finding $N$ points is $\frac{N}{\pi R^2}$
+
+Therefore the probability of finding a point between $r$ and $r + dr$ is
+\begin{equation}
+    $\frac{2 \pi}{\pi R^2} dr$
+\end{equation}

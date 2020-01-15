@@ -1,0 +1,309 @@
+%!TEX root = ../thesis.tex
+%*******************************************************************************
+%****************************** Second Chapter *********************************
+%*******************************************************************************
+
+\chapter{Digital pathology and the quantification of immune infiltrate}
+
+\ifpdf
+    \graphicspath{{Chapter2/Figs/Raster/}{Chapter2/Figs/PDF/}{Chapter2/Figs/}}
+\else
+    \graphicspath{{Chapter2/Figs/Vector/}{Chapter2/Figs/}}
+\fi
+
+\section[Introduction]{Introduction}
+Immune infiltration is frequently manually assessed in pathology departments. Digital pathology is not routine in the clinic but increasingly investigated in research and . Quantifying the stromal and epithelial immune infiltrate in a tissue section requires the segmentation of the tissue into epithelial and stromal compartments and the identification of cells by thresholding for nuclei based on a nuclear stain. In this chapter I used a dataset from the SEARCH cohort that contained the density of CD$8^+$, CD45RO$^+$ and CD68$^+$ immune cells in epithelium and stroma for each patient and aimed to develop a robust statistical workflow for the analysis of quantitative digital pathology data and for the investigation, comparison and interpretation of quantities of infiltration in different tissue regions. 
+
+\section{Collaborator Roles}
+Anne Montfort (AM) - Sectioning, Staining, image segmentation
+JMcD - Pathologist, Image segmentation
+Anna Piskorz - Sequencing
+Sarwah Al-Khalidi (SAK) - Resequencing of some samples
+
+\subsection{History of the project}
+This part of the project began when a collaborator (AM) approached me with the raw files from Definiens software, requiring a basic analysis of the relationship between cell count density and survival alone. 
+
+In this part of my project, I took these files, investigated the TMAs for bias, extracted the outlying cores, investigated the distribution and nature of density to pick the right statistical test and then along with the basic information about cell density and survival, I investigated model building, the functional forms of infiltrate density, how to combine multiple infiltrates with principal component analysis and investigated the underlying patterns of biology including quantifying the immune exclusion in a sample. 
+
+All analysis was done by me and all further questions investigated beyond what are the individual infiltrates and how do they effect survival, were proposed and answered by myself.
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter2/Figs/Raster/Thesis_visual_abstract.PNG}
+    \caption[Visual Abstract]{Visual abstract}
+    \label{fig:visual_abstract}
+\end{figure}
+
+\section{Cohort}
+
+Samples from 570 patients from the prospective SEARCH ovarian cancer population-based study had been used to construct tissue microarrays. Ethical approval was granted by the Eastern Multicenter Research Ethics Committee. Among the samples from 570 patients with primary epithelial ovarian tumours, 332 were high grade serous ovarian cancer patients. All cases underwent detailed histopathological review by a gynaecological pathologist (JM). Patients were staged as having localized, regional or distant disease (L/R/D).
+
+\section[Methods]{Methodology}
+\subsection{Immunohistochemistry}
+Immunohistochemistry was carried out upon the tissue sections by Anne Montfort (AM) according to the protocol in section \ref{sec:am_method}. Previously published PTEN immunostaining data was used where high PTEN expression was considered to be positive staining and low expression to be weak, heterogeneous or negative staining respectively\cite{PTEN_brenton}.
+
+\subsection{Mutation data}
+
+Sequencing and mutation analysis was carried out prior to this PhD by Anna Piskorz (AP). The coding regions of TP53 were sequenced by tagged-amplicon next generation sequencing as previously described\cite{20} and confirmed by immunohistochemical analysis using a 4-tier core system\cite{21}. Sequencing of germline mutations in the  \texit{BRCA1} and \texit{BRCA2} genes was performed as previously described.\cite{sequencing}. Some samples were resequenced by SAK following analysis highlighting issues in diagnosis.
+
+\subsection{Immune cell quantification}
+ The number of CD8$^+$ and CD45RO$^+$ cells per mm2 of epithelial and stroma areas, as well as the percentage of epithelial and stromal areas covered by CD68 staining, had been digitally determined using the Tissue Studio software (Definiens™).
+
+Figure \ref{fig:segmentation} shows examples of cell identification and classifications of tissue regions in the data set from this cohort.
+
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[width=0.8\textwidth]{Chapter2/Figs/Raster/Segmentation.png}
+\caption[Segmentation in Definiens]{Examples of the segmentation of tissues and identification of cells in the Definiens software.}
+\label{fig:segmentation}
+\end{figure}
+
+\subsection{Statistical analyses}
+ The clinical variables of age at diagnosis, menopause status and stage were available for the cohort and I included them in the analysis. I used univariable Cox regressions to identify best-fitting variables for the final multivariable Cox regression model. The refined model was compared with a combined multivariable Cox regression model including all immune infiltrates. Hazard ratios (HR) refer to a single unit increase in continuous variables. The proportional hazards assumption was tested and satisfied in all cases using Schoenfeld residuals. The Kaplan–Meier analysis (with log-rank test) was applied to illustrate survival differences graphically. Two-sided P-values <0.05 were used to indicate statistical significance. 
+
+Principal component analysis (PCA) using the R package prcomp was used to extract the independent components of variance between patients. The package prcomp uses singular value decomposition and the variables were scaled to have unit variance before creating composite linear independent variables. These were then passed forward to the survival modelling. The Akaike Information Criterion (AIC), equation \ref{eq:AIC} was used to compare the performance of survival models.
+
+Bonferroni p-value corrections were carried out for all multiple testing. P < 0.05 was considered significant for all analyses. 
+
+
+\section{Results}
+ 
+
+\subsection{Patient characteristics}
+Figure {\ref{fig:remark_search}} shows the REMARK diagram for this study and Table \ref{table:clinical_SEARCH} shows the clinical characteristics of the 332 HGSOC patients from the study cohort. Immunohistochemical analyses on tissue microarrays (TMAs) were performed to detect CD8$^+$, CD45RO$^+$ and CD68$^+$ cells in tissue cores from primary ovarian specimens.  152 HGSOC cases were available for analysis after quality assurance, data cleaning and the reduction of the data set to only cases with complete results for CD8, CD45RO and CD68 staining in both epithelium and stroma as well as survival data. 
+Tagged amplicon sequencing was performed on 248 cases and TP53 mutation was detected in 231 samples (93\%) (Table \ref{tab:clinical_SEARCH}). Previously published data for germline  \texit{BRCA1} and \texit{BRCA2} mutation and PTEN expression were available for 297 and 155 cases respectively\cite{17,20}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{Chapter2/Figs/Raster/montfort-REMARK.png}
+    \caption{REMARK diagram for the SEARCH cohort.}
+    \label{fig:remark_search}
+\end{figure}
+\begin{table}[]
+    \centering
+    \begin{tabular}{lll}
+    \hline
+ N	&	& 332 \\
+Median Age (IQR) & & 58.0 (51.0-64.0) \\
+\hline
+Stage &	localized &	64 (19.3\%)\\
+ &	regional &	42 (12.7\%)\\
+ &	distant	& 202 (60.8\%)\\
+ &	unstaged &	24 (7.2\%)\\
+ \hline
+TP53 mutation &	gof &	137 (55.2\%) \\
+ &	lof &	94 (37.9\%)\\
+&	wild type &	17 (6.9\%)\\
+ &	Not assessed &	84 \\
+ \hline
+PTEN IF	& 	High &	28 (18.1\%)\\
+& 	Low	 & 127 (81.9\%)\\
+&	Not available &	177 \\
+\hline
+BRCA status		& 	wild type &	256 (86.2\%)\\
+ &	\textit{BRCA1} &	18 (6.1\%)\\
+ &	\texit{BRCA2} &	23 (7.7\%)\\
+ &	Not available &	35\\
+\hline
+    \end{tabular}
+    \caption{Patient characteristics for the HGSOC subset of the SEARCH cohort.}
+    \label{tab:clinical_SEARCH}
+\end{table}
+
+ \subsection{Quality assurance and spatial bias}
+Quality checking for spatial bias across TMAs and effects of varying tissue area was carried out upon all cores and across TMAs using heatmaps and Shapiro-Wilk tests. Figure \ref{fig:heatmap}. No patient independent relationship was observed between spatial location and intensity of staining or core size. 
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter2/Figs/Raster/Thesis-heatmap.png}
+    \caption{Density of each infiltrate for each position in the SEARCH TMA.}
+    \label{fig:heatmap}
+\end{figure}
+
+
+\subsection{Digital pathology analysis of tumour composition and immune cell densities}
+As described in the methods, image analysis software was used to determine the area of tumour epithelium \ref{fig:distribution_infiltrate}A and stroma in each core (Fig. \ref{fig:distribution_infiltrate} and Supplementary Fig \ref{}). I initially investigated the epithelial and stromal composition of these images and found that of 964 images representing 332 HGSOC patients, 69 patients (20.8\%) had images which contained malignant epithelium but no stroma; 250 patients (75.3\%) had images which contained epithelium and >1\% adjacent stroma and 13 patients (3.9\%) had images containing no tumour epithelium (Fig \ref{fig:distribution_infiltrate}). The median proportion of epithelium and stroma was 85.1\% (IQR 51–100\%) and 14.9\% (IQR 0–49\%) respectively. 
+I also examined the correlation between p53 allele fraction and average epithelial fraction across samples for each patient. As p53 mutations are found ubiquitously in HGSOC tumour cells we expect the proportion of tumour in a sample to be correlated with p53 mutant allele fraction. I found them to be positively correlated ($R= 0.24$, $p=0.0027$). The correlation between technical replicates for allele frequency and sequencing depth is shown in Appendix \ref{fig:p53_allele}
+
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter2/Figs/Raster/Thesis-05.png}
+    \caption{\textit{p53} mutant allele fraction against epithelial area of a core.}
+    \label{fig:p53_allele}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{Chapter2/Figs/Raster/plots_dist.png}
+    \caption[Distribution of immune densities.]{ (A) Scatter plot of the stroma and epithelial  areas averaged across sections for each patient. (B), (C) and (D) show the distribution of immune cell densities in epithelium and stroma. CD8$^+$ and CD45RO$^+$ densities were defined as counts per mm2 and CD68$^+$ as the percentage of tissue stained for this marker. (Notches on box plots extend 1.58 ✕ IQR / sqrt(n) and approximate the 95\% confidence interval for the median. Box plot whiskers extend to 1.5 ✕ IQR.) 
+}
+    \label{fig:distribution_infiltrate}
+\end{figure}
+
+
+Quantitative densities of all immune populations were then generated automatically through image analysis, the quantitative assessment of CD8$^+$ T cell, CD45RO$^+$ memory lymphocyte and CD68$^+$ macrophage densities in each compartment are shown in Supplementary Fig. 1. The relationship between the fraction of tumour in a core and the density of immune infiltration in the epithelium was examined. Intra-epithelial CD8$^+$ and CD45RO$^+$ densities were weakly correlated with the purity/tumour fraction of the sample ($R^2 = 0.17$, $p = 0.003$ and $R^2 = 0.16$, $p=0.006$) but CD68$^+$ epithelial density was not. 
+
+The three immune populations in our samples showed moderate to strong correlation between epithelium and stroma (Supplementary Fig. 3 and Supplementary Table 2). Samples with low density of stromal immune populations generally had low density of epithelial infiltrate and vice versa. The distribution of densities of immune populations within tumour epithelium and stromal areas were compared (Fig. 1B–D). The density of CD8$^+$ and CD45RO$^+$ cells were significantly higher in stroma than tumour epithelium (p = 0.005 and p = 0.004 respectively; Welch’s t-test) but not significantly different for CD68$^+$ cells.
+In describing the patterns of immune infiltrate, the terms immune-inflamed, immune-desert and immune-excluded have been used to describe varying T-cell infiltration based on histological and transcriptional analyses 11,23-25. Immune-inflamed and immune-desert patterns reflect high positive or negative correlations between all infiltrates but T-cell exclusion describes tumours where CD8$^+$ cells are significantly absent from tumour epithelium whilst still being present in the surrounding stroma\cite{26,27}. Given the higher infiltration in stroma than epithelial compartments, we defined immune cell exclusion as a 10-fold difference between tumour epithelium and stromal infiltration as the standard deviation of the log10 transformed counts was approximately 1. CD8$^+$ exclusion was present in 20 (10.6\%) cases and 36 (20\%) cases had CD45RO$^+$ exclusion. No cases had significant exclusion of CD68$^+$ infiltrate from tumour epithelium.  Notably none of the cases had both CD8$^+$ and CD45RO$^+$ exclusion. %Expand on why I used 10 fold cut off etc, examine cutoffs etc and differences.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{Chapter2/Figs/Raster/correlation_inf.png}
+    \caption[Correlation between infiltrates]{Scatterplots and distributions of CD68$^+$, CD45RO$^+$ and CD8$^+$ infiltrate in Stroma and Epithelium. All infiltrates were correlated between matched samples across both tissue region classes.}
+    \label{fig:ch2_correlation}
+\end{figure}
+
+\subsection{Survival model building}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Chapter2/Figs/Raster/modelfit_2-08.png}
+    \caption[Residuals of model fit]{Residuals of model fit plotted against predicted value for log-transformed immune variables and age at diagnosis. All relationships were found to be approximately linear.}
+    \label{fig:modelfit}
+\end{figure}
+
+ I modelled the survival of patients using Cox proportional hazards and the relationship between the immune variables and survival was found to be approximately log-linear. The only clinical variables accompanying the cohort were age at diagnosis, stage and menopause status. The relationship between the clinical variables and survival was examined before model fitting and the relationship between age and survival was found to be approximately linear (Figure \ref{fig:modelfit}, Supplementary Table 3). 
+
+\subsection[Prognostic value of individual infiltrates]{Stromal CD68$^+$ and CD45RO$^+$ infiltrate are the strongest individual prognostic markers}
+Univariable analysis showed improved survival with increasing stromal density of CD45RO$^+$ (HR 0.76 95\% CI 0.65–0.90, p=0.001) and CD68+(HR 0.53 95\% CI 0.34–0.81, p=0.003) (Table 1). Modelling each immune variable with stage showed improved predictive value for epithelial CD8$^+$ density (HR=0.83, p-value=0.027) as well as stromal CD68$^+$ and CD45RO$^+$ density and epithelial CD45RO$^+$ density (Table 1). Figure \ref{fig:kmcd68845}) shows illustrative Kaplan-Meier survival curves for high and low stromal and epithelial CD68$^+$, CD45RO$^+$ and CD8$^+$ densities.\\
+
+In cores with <1\% stroma, epithelial CD8$^+$ malignant epithelial infiltrate remained an independent prognostic factor but epithelial CD45RO$^+$ density was not significant (Supplementary Table \ref{tab:surv_cd8_epi}).
+In clinical reporting, quantifying immune populations in exclusively tumour epithelium is technically challenging and time consuming. We tested the effects of using the average density of each marker averaged across both tumour and stromal regions from each core (Table 1).  Averaging the tissue density of CD8$^+$ increased the strength of the associated hazard ratio and significance of the model (HR=0.79, p-value=0.010) indicating increased prognostic value over quantitation of individual epithelial and stromal infiltrates. Figure \ref{fig:KM_infiltrates} shows illustrative Kaplan-Meier survival curves for high and low CD68$^+$, CD45RO$^+$ and CD8$^+$ densities over combined epithelium  and stroma compartments.\\
+
+Multivariable Cox regression analysis including all infiltrates and stage was carried out on patients with complete data for all infiltrates (n=152) (Table 2).  In this model only stage and CD68$^+$ stromal infiltrate were significant predictors of survival. 
+We then refined the model by removing the least significant elements (defined as those with p>0.1) (Table 2, n=152). Interestingly, we found that the p-values for CD68$^+$ and CD45RO$^+$ stromal infiltrates in the refined model become less significant and the hazard ratios are attenuated in comparison to both the univariable regression and the full model. This is likely due to the inability of Cox regression to distinguish with confidence whether stromal CD45RO$^+$ or CD68$^+$ density is the most significant predictor when there is a strong correlation between all the immune variables.
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter2/Figs/Raster/KM_allinf.png}
+    \caption[KM Survival curves for individual infiltrates]{Kaplan–Meier survival curves using cut point of median density of stromal CD68$^+$ macrophages and CD45RO$^+$ memory T cells using left truncation and right censoring. Median entry to the study for all patients after diagnosis was 26.4 months. Median follow up time from diagnosis to exit or death was 105.1 months.}
+    \label{fig:KM_infiltrates}
+\end{figure}
+
+
+\subsection{Ratio of stromal immune infiltrate to intra-epithelial immune infiltrate is not prognostic.}
+
+The location of immune infiltrate in either the intra-epithelial or stromal regions is a micro-environmental factor that can only be derived from images. The ratio of tumour to stromal infiltrate may indirectly  measure properties of the ECM that allow for infiltration into the tumour core or measure the extent of the interaction of the immune cells with epithelial cells. As shown previously, stromal and intra-epithelial immune cell densities are correlated. I investigated whether the ratio of stromal infiltrate density to intra-epithelial immune infiltrate density was a significant predictor of risk in HGSOC using the Cox proportional hazards model.
+
+
+% latex table generated in R 3.3.2 by xtable 1.8-2 package
+% Thu Oct 19 15:01:03 2017
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+ & coef & exp(coef) & se(coef) & z & Pr($>$$|$z$|$) \\ 
+  \hline
+\multicolumn{5}{l}{
+
+CD8$^+$
+}\\
+Stroma:Tumour ratio & 0.069 & 1.072 & 0.179 & 0.386 & 0.700 \\ 
+   \hline
+\multicolumn{5}{l}{CD45RO$^+$
+}\\
+Stroma:Tumour ratio & -0.105 & 0.900 & 0.177 & -0.596 & 0.551 \\ 
+   \hline
+\multicolumn{5}{l}{
+
+CD68$^+$
+}\\
+Stroma:Tumour ratio & 0.010 & 1.010 & 0.005 & 1.772 & 0.076 \\ 
+   \hline
+\multicolumn{5}{l}{}\\
+\end{tabular}
+\caption[Cox regression for ratio of Tumour to Stroma infiltrate]{Single predictor Cox proportional hazard tests with ratios of stromal to tumour infiltrate as predictors.} 
+\label{tab:s:t}
+\end{table}
+There is no significant effect on survival of stroma:tumour ratio for any of the infiltrates. It is worth noting that the subset of evaluable patients included here decreases. This is because only cores with non zero tumour infiltrate density can be included. I would have expected that the quantity of infiltration from the stromal to intra-epithelial regions would have effected tumour progression and hence survival so this is an interesting negative result.
+
+\subsection{Principal components of the combined immunospace describe biologically interpretable effects.}
+ Part of the problem of analysing the effect of immune populations upon survival is that multiple immune infiltrates are correlated and may have additive or suppressive effects.  In order to assess the multi-dimensional nature of the immune response in more detail I proposed that as the three types of immune infiltrate vary continuously across epithelium and stroma these variables can be regarded as six dimensions of an ‘immunospace’ (three infiltrates, 2 localizations).  Given the strong correlations between infiltrates (Figure \ref{fig:ch2_correlation}), these immune variables are not independent. I used principal component analysis (PCA) to determine the independent patterns across these dimensions, using the 152 patients for whom complete data were available.
+ 
+ 
+ 
+ PCA transformed the six correlated infiltrate variables into six independent axes with the first component containing the largest proportion of variance (60\%) in the data set\ref{tab:PC}. In principal component 1 (PC1), the weightings of all immune infiltrates are positive and similar in magnitude (Supplementary Table 5). This indicates that as one infiltrate increases so do all the others and represents the degree of coordinated immune response. The remaining principal components characterize additional patterns across immune infiltrates independent of PC1. The additive contribution of PC2 characterises negative correlation between CD8$^+$ infiltrates and CD68$^+$ macrophages and CD45RO$^+$ memory cells. PC3 characterizes additional variation where epithelial and stromal infiltrates are negatively correlated, the most positive values of PC3 correspond to high infiltration in tumour epithelium compared to stroma and the most negative values of PC3 correspond to the opposite, the aforementioned immune exclusion. 
+ 
+\begin{table}[]
+    \centering
+    \begin{tabular}{lllllll}
+&PC1& PC2&PC3&PC4&PC5&PC6\\
+\hline
+CD8+ tumour density& 0.38&-0.56&0.58&-0.1&0.4&-0.21\\
+CD8+ stromal density&0.38&-0.59&-0.47&0.27&-0.21&0.43\\
+CD68+ tumour density&0.41&0.47&0.37&0.11&0.09&0.67\\
+CD68+ stromal density&0.42&0.3&-0.29&0.56&0.36&-0.45\\
+CD45RO+ tumour density&0.45&0.11&0.21&-0.07&-0.78&-0.36\\
+CD45RO+ stromal density&0.41&0.15&-0.42&-0.77&0.22&-0.03\\
+\hline
+    \end{tabular}
+    \caption{Contributions of normalized infiltrates to all principal components.}
+    \label{tab:PC}
+\end{table}
+
+
+ 
+ 
+Figure \ref{fig:PC_examples} shows representative images with the largest magnitudes of PC1, PC2 and PC3 to visually illustrate the patterns described above. The variance in the remaining principal components (4-6) is smaller and less informative. Variance in PC4 is predominantly from CD45RO$^+$ stromal density, PC5 is from CD45RO$^+$ epithelial density and PC6 is from CD68$^+$ epithelial density. Patients are plotted by their PC1 and PC2 values in Supplementary Fig. 7.  Cox proportional hazard regression was used to assess whether these principal components were predictive of survival. Only PC1 was an independent predictor of survival in our cohort and was associated with improved survival (Univariate: HR=$0.89$, $p=0.024$, PC1+Stage: HR: $0.88$, $p=0.019$) (Supplementary Table 6) reflecting the good prognosis of a strong coordinated immune response. The association of this principal component with survival is also illustrated graphically using Kaplan Meier curves in Fig. \ref{fig:km_PC}.
+\begin{landscape}
+\begin{figure}[width=0.8\textwidth, keepaspectratio]
+    \centering
+    \includegraphics[width=\textwidth]{Chapter2/Figs/Raster/PC_montfort.png}
+    \caption[Examples of tissue with largest values of principal components.]{Images of immune infiltrate with the highest values of principal components 1, 2 and 3. The values of the immune infiltrates of these images are shown on the boxplots of the distribution across all samples.}
+    \label{fig:PC_examples}
+\end{figure}
+\end{landscape}
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter2/Figs/Raster/Montfort-2018_Fig7A-PC1.png}
+    \caption[Kaplan Meier Curves for Principal Component 1]{Kaplan Meier illustrative survival curve. Principal component 1 are split at the median. The survival of high and low values of Principal component 1 are plotted against time. }
+    \label{fig:km_PC}
+\end{figure}
+Cox regression survival models were also calculated on all combinations of principal components and stage. The Akaike Information Criterion (AIC) was used to compare the performance of these survival models and includes a penalty on the number of terms to reduce over-fitting (Supplementary Fig. 8). The model combining stage, PC1 and PC5 had the best performance for predicting overall survival. The improvement with the addition of PC5 shows that the addition of this principal component has a suppressor effect in the model, increasing the significance of other variables when included. This demonstrates that survival is predominantly determined by the coordinated immune response and further variation in survival from this trend can be encoded by the quantity of epithelial CD45RO$^+$ infiltrate. Interestingly, the models that contained stage and either stromal CD45RO$^+$ or CD68$^+$ infiltrate contained a similar amount of information about patient survival as the one that contained stage and principal components 1 and 5. In our cohort, the density of CD68$^+$ and CD45RO$^+$ stromal infiltrates are therefore the best single infiltrates for survival modelling. 
+
+
+\subsection{Are genetic defects associated with HGSOC driving individual infiltrates or the coordinated immune response in tumours?}
+
+\subsubsection*{Infiltrate density is not significantly associated with \textit{BRCA} status}
+To investigate the interactions between the TME and the genome, can ask whether a germline mutation in either of the \textit{BRCA1/2} genes results in changes in the TME and specifically the immune infiltrate. I investigated whether tumour, stroma or full core measures of CD8$^+$, CD45RO$^+$or CD68$^+$densities were related to \textit{BRCA1/2} mutations using the Kruskal-Wallis rank sum test. I compared the infiltrate density distributions between patients with no mutation, a mutation in \textit{BRCA1} and a mutation in \textit{BRCA2}. I found that the distributions of CD8$^+$, CD45RO$^+$and CD68$^+$infiltrates and the principal components were not significantly associated with \textit{BRCA} mutation status. This was unexpected as previous results have found increases in CD8$^+$infiltrate with a \textit{BRCA1} mutation\cite{Clarke2009}.
+
+\subsubsection{Infiltrate density is not significantly associated with type of \textit{TP53} mutation.}
+Mutant P53 proteins have been linked to multiple micro-environmental changes\cite{Cordani2016}. I investigated whether the type of TP53 mutation produced measurable changes in the TME. Tumour, stroma or full core measures of CD8$^+$, CD45RO$^+$or CD68$^+$densities were compared between gain or loss of function mutations in \textit{TP53}. I used the Kruskal-Wallis rank sum test and found that the distribution of immune infiltrate was not significantly associated with type of \textit{TP53} mutation.
+
+\subsubsection{Infiltrate density is not significantly associated with change in PTEN expression.}
+Changes in PTEN expression are cell-intrinsic and levels of PTEN expression are prognostic in HGSOC\cite{RN17, RN15}. Tumour, stroma or full core measures of CD8$^+$, CD45RO$^+$ or CD68$^+$ densities were compared between patients with high or low PTEN expression as measured by both IHC and IF. Using the Kruskal-Wallis rank sum test I found that change in PTEN expression was not significantly associated with any change in the density of immune infiltrate. This particular cell-intrinsic change is not associated with a change in immune infiltration in our cohort.
+
+The presence of germline \texit{BRCA2} mutations was significantly associated with lower CD8$^+$ cell density than patients with a \texit{BRCA1} after multiple testing correction (Table 3). There was no significant association between the quantity of CD45RO$^+$ or CD68$^+$ infiltrate and the mutational status of either \texit{BRCA1} or \texit{BRCA2} genes (Table 3). No significant association was detected between TP53 GOF and LOF mutations or PTEN expression and the densities of CD8$^+$, CD45RO$^+$ and CD68$^+$ cells in epithelium or stroma (Table \ref{tab:}). Similarly, changes in the principal components were not significantly associated with PTEN expression, TP53 GOF or LOF mutation or germline \textit{BRCA1}/\texit{BRCA2} mutation status (Table \ref{tab:}).
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c}
+         &  \\
+         & 
+    \end{tabular}
+    \caption{T-test for association between PTEN, BRCA status or GOF/LOF mutations and immune infiltrate }
+    \label{tab:my_label}
+\end{table}
+
+
+\clearpage
+
+\section{Discussion}
+ One of the key and novel findings of this work was that the global measure of CD8$^+$ infiltrate was a strong and improved predictor of survival over CD8$^+$ infiltrate alone. The implication of the average infiltration being a stronger predictor of survival is that averaging over the intra-tumour stroma allows for a better measure of long term infiltration dynamics and measures the presence of a reservoir of immune cells, poised to infiltrate the epithelium.  I also demonstrated here that the quantity of epithelial and stromal CD45RO$^+$ is a positive prognostic feature, a result which also confirms the positive incremental benefit of a long term and mature immune response. 
+ 
+ I observed in addition that stromal and epithelial populations and all infiltrates were somewhat positively correlated. It is worth noting that the  CD8$^+$ and  CD45RO$^+$ subpopulations are not biologically mutually exclusive and as such I expect some correlation between quantities but in this dataset there was no opportunity to examine the specific spatial locations of the immune cells. 
+
+As discussed in the introduction, many pieces of research have illustrated that macrophage function is micro-environment dependent\cite{ZhangMacrophage2014, li2018intratumoral}, demonstrating that exact localisation effects macrophage function. My work is in agreement with the observation by Li et al. that stromal regions are most prognostic in which to evaluate macrophages. I find however, in contrast to their work in lung cancer, that CD68$^+$ macrophages are a positive prognostic feature. Further elucidation of the nature of macrophages and their interaction with the TME is required and some such questions are investigated in this thesis.
+These observations all suggest that despite the focus of many studies being the intra-epithelial immune infiltration, perhaps due to a focus on direct contact and cytotoxic interaction between immune and tumour cells, that stromal infiltrate should be evaluated. It appears that stromal infiltration plays its own role in the immune response as well as perhaps providing more information about the epithelial infiltration through inference of long term immune infiltration dynamics.
+
+In this chapter I also developed the idea of an immunospace by viewing the quantity of each immune infiltration as part of a multidimensional immune landscape, this allowed me to analyse patterns across the different immune populations and to extract the principal components, measures of variation and observed that the correlation between infiltrates amounts to general coordinated immune response which is a positive prognostic. It also allowed me to examine the independence of other phenomenon as the immune exclusion from the epithelium which could be obtained in an unbiased manner.
+
+Using quantitative data also allowed me to define a threshold for immune exclusion, a 10 fold difference in immune infiltration. I observed that CD8$^+$,  CD45RO$^+$ and  CD68$^+$  infiltrates predominantly exist on a continuum without clear justification for cutpoints.
+
+This work also finds no link between immune infiltration and germline \textit{BRCA} mutations, this is in part due to effects of cohort size. With approximately 20 patients with mutations, I am underpowered to ask multiple questions about the differences in immune infiltration between non-\textit{BRCA} and \textit{BRCA}-mutated patients.
+
+The exact spatial nature of immune infiltration when taking into account tumour structure is unknown. There may also be a link between stromal immune infiltration and collagen deposition. Comparison to infiltration which would be expected from diffusion alone has not been examined and these are key questions in the rest of this thesis.
+

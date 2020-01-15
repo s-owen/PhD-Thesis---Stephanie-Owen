@@ -1,0 +1,203 @@
+%!TEX root = ../thesis.tex
+%*******************************************************************************
+%****************************** Third Chapter **********************************
+%*******************************************************************************
+\chapter{Quantifying and classifying tissue structure}
+
+% **************************** Define Graphics Path **************************
+\ifpdf
+    \graphicspath{{Chapter3/Figs/Raster/}{Chapter3/Figs/PDF/}{Chapter3/Figs/}}
+\else
+    \graphicspath{{Chapter3/Figs/Vector/}{Chapter3/Figs/}}
+\fi
+\section{Introduction}
+As shown in the previous section, stromal and epithelial immune infiltration may have differing roles within the response to a developing tumour. It is clear from observing image of tumour sections that the structure of the epithelium and stromal regions varies dramatically. These morphological differences have been discussed by Lisio et al. \cite{Lisio2019Feb} amongst others. This section of the thesis aims to set out an automated classification of such tissue structure, to investigate whether this can be reliably obtained from multiple types of tissue image and whether the structure defined this way is related to the infiltration of the tumour by particular types of immune infiltrate.  The workflow of this Chapter is illustrated in Figures \ref{fig:VA_ch4} and \ref{fig:VA_ch4_2}.
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter3/Figs/Chapter3_VA.PNG}
+    \caption{Visual Abstract for Chapter 4}
+    \label{fig:VA_ch4}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter3/Figs/VAch2_2.png}
+    \caption{Visual Abstract for Chapter 4}
+    \label{fig:VA_ch4_2}
+\end{figure}
+
+\section{Collaborators and Roles}
+Sarwah Al-Khalidi(SAK) stained the OV04 TMA sections for CK7 and H&E.
+
+\section{Methodology}
+\subsection{Patient Cohorts}
+Data from the OV04 Cohort was used for this section as it had existing sections that had H\&E and CK staining. This cohort also had sections available for further analysis using SHG. 
+
+\subsection{IHC}
+\subsubsection{Cytokeratin 7 staining}
+Tissue sections from the OV04 cohort were stained with Cytokeratin7 by Sarwah Al-Khalidi and the method of staining and imaging is laid out in section \ref{sec:sarwah_staining}.
+
+\subsection{H\&E}
+Automated Haemotoxylin and Eosin staining was carried out by SAK and is described in \ref{sec:sarwah_staining}. 
+
+\subsection{SHG}
+SHG microscopy at wavelength 850nm was performed on the Leica SP5 microscope and imaged at 20x. DAKO mounting media and a coverslip of thickness 150um was used. 
+
+\subsection{DBSCAN}
+The package \textbf{dbscan} in R was used for density based clustering analysis. The mathematics of this method is discussed in the Methods. 
+
+\section{Results}
+Having found in the previous chapter that the specific localisation of several immune infiltrates was an important factor in the prognosis of patients, I wanted to investigate the structure of tissue sections and assess the impact of structure on immune infiltrate. I wanted to use both H&E and Cytokeratin stained images to derive this structure. The use of an epithelial marker was to validate tissue classification of H\&E and to validate structures across multiple sections from the same core.
+
+The morphologies discussed by Lisio et al are solid architecture, glandular architecture with slit-like spaces, papillary architecture and cribriform and pseudoendometroid architecture\cite{Lisio2019Feb} and in order to assess whether these structures could be automatically derived from images, the segmentation of tumour and stroma cells must first be acquired. 
+
+\subsection{Patient Characteristics}
+TMAs had been previously constructed from the CTCR-OV04 clinical studies, which were designed to collect imaging, blood, and tissue samples for exploratory biomarker studies. All patients provided written, informed consent for participation in these studies and for the use of their donated tissue, blood specimens, and anonymized data for the laboratory studies carried out. The CTCR-OV04 studies were approved by the Suffolk Local Research Ethics Committee (reference 05/Q0102/160) and Cambridgeshire Research Ethics Committee (reference 08/H0306/61).\cite{}
+
+The TMA previously constructed for this cohort contained 40 patients with HGSOC. 
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c}
+       N  &  40 \\
+        Age &  77 (60-90)
+    \end{tabular}
+    \caption{OV04 study patient characteristics}
+    \label{tab:OV04_patient}
+\end{table}
+
+
+
+
+\subsection{Cell classifier performance and comparison between H\&E and CK}
+
+Images of tissue sections stained with both H\&E and a CK7 marker were analysed. QuPath was used to segment nuclei based upon their optical density. Nuclei were then classified based upon features using a random forest based classifier. Cells were split randomly into a test and training data set. Examples of tissue classification on H\&E and CK stained images. Over 5000 cells from each TMA section were labelled and 70\% were used for training and 30\% were used for validation test sets. Confusion matrices for the H\&E and CK classifier are shown in Tables (\ref{tab:classifier_he} and \ref{tab:classifier_ck}). These show a very good performance by both classifiers. 
+
+
+\begin{figure}
+    \centering
+    \includegraphics{Figs/heck/A-2_core_class.png}
+    \caption[Example of Stroma and Tumour classifier built in QuPath software]{Example of Stroma and Tumour classifier built in QuPath software. Tumour is highlighted in yellow and stroma in blue. Classifier is trained on both H\&E and CK7 stained images.}
+    \label{fig:he_classify}
+\end{figure}
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{l|cc}
+       &   Stroma  &   Tumor\\
+       \hline
+Stroma   &    1263    &     2\\
+Tumor   &      2     &  346 \\
+         
+    \end{tabular}
+    \caption[Confusion matrix for QuPath CK based classifier.]{Confusion matrix for QuPath CK based classifier. Classifier accuracy is 98.75\% (n=1613).}
+    \label{tab:classifier_ck}
+\end{table}
+
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{llcc}
+    \hline
+       &           &  Label &\\
+       &           &    Stroma	& Tumor\\ 
+\hline
+Classification & Stroma	&  2653	 &   40\\
+             & Tumor	 &   11	 & 2165\\
+ \hline
+    \end{tabular}
+    \caption[Confusion matrix for QuPath H\&E based classifier.]{Confusion matrix for QuPath H\&E based classifier. Percentage of correctly classified objects in test set: 98.95\% (n=4869).}
+    \label{tab:classifier_he}
+\end{table}
+
+
+\subsection{High Grade Serous tissue structure analysis}
+
+In order to define a tissue structure of each core I selected several properties to examine and measure;
+
+\begin{itemize}
+    \item Stroma/Tumour percentage
+    \item Surface Area: Volume ratio
+    \item Cellular entropy
+    \item Number of clusters 
+\end{itemize}
+
+\subsubsection*{Stroma/Tumour percentage}
+This most basic measure of tissue composition was utilized in the previous chapter. In this chapter I measured this percentage as both an area and a number proportion for each image type. Figure\ref{fig:correlation_tumourarea} shows that the two values are strongly correlated as would be expected from serial sections. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Chapter3/Figs/correlation_TS_he_Ck.png}
+    \caption{Correlation between percentage epithelium measured via H&E and that measured by analysis of an image of a CK stained serial section.}
+    \label{fig:correlation_tumourarea}
+\end{figure}
+
+\subsubsection*{Invasive front}
+In a purely diffusive model where immune infiltrate travels from the stroma into the epithelial nests, epithelial infiltrate would be proportional to the surface area of the epithelial nodules that are exposed to the surrounding stroma. In order to gain a measure of this surface area, I defined edge cells as those cells which had a nearest neighbour of a differing class. The surface area to volume ratio can be estimated in 2D as 
+\begin{equation}
+    
+\frac{N_{edge cells}}{N_{\mathrm{epithelial}}}
+\end{equation}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Chapter3/Figs/Thesis-08.png}
+    \caption{Example of classified images (left) and the cells in the image designated as edge cells(right).}
+    \label{fig:edge_cells}
+\end{figure}
+
+\subsubsection*{Clustering}
+I assessed multiple methods for clustering tissues, in terms of identifying groups of tissues I found that it was best to use DBSCAN, a density based clustering method. The results of other clustering methods are shown in \ref{fig:clust_bad}. An example of DBSCAN on serial H\&E and CK sections are show in Figure \ref{fig:dbclust}. These show very similar identifications of clusters across both samples.
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter3/Figs/knn_example_2.png}
+    \caption[k-nearest neighbour clustering of cells]{k-nearest neighbour clustering of cells identified in a tissue section. The requirement of a pre-specified number of clusters and that the algorithm does not account for varying density or information other than nearest neighbours, means that this method of clustering fails to automatically identify good clustering and in the case of densely packed TMA sections will merely split it equally.}
+    \label{fig:clust_bad}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Chapter3/Figs/dbscan_fullexample.png}
+    \caption{Examples of clusters of cells within tissue sections when epithelial, stromal cells are viewed separately and when all cells are clustered.}
+    \label{fig:dbclust}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Number of clusters.}
+    \label{fig:dbscatter}
+\end{figure}
+
+\subsubsection*{Entropy}
+In addition to the number of stromal and tumour clusters, I wanted to add entropy at multiple scales to the tissue features. Entropy can be understood as a measure of mixing and the formula for deriving entropy is given in Methods \ref{eq:entropy}. I hypothesised that given that tissue regions with mixed cell types would have a higher entropy than those without, that with multiscale area sampling, a reliable classification into tumours with mixing and without could be achieved. Figure \ref{fig:entropy} gives the mean entropy over 20 subsections of the image for matched H\&E and CK stained sections. This shows a moderate correlation but. 
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter3/Figs/Thesis-06.png}
+    \caption{Shannon entropy derived for a H\&E and CK image of serial sections from the same patient core.}
+    \label{fig:entropy}
+\end{figure}
+
+\subsection{Morphology classification}
+Having reliably identified stromal and epithelial cells and identified subclusters and entropy of tissue I aimed to then classify tissue sections based upon these features into the morphological subtypes mentioned earlier.
+
+In order to do this I labelled each tissue section as Solid, Glandular or Unknown.
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Histogram of the number of cases classified as solid, glandular, epithelial  or cribriform structure.}
+    \label{fig:num_classl}
+\end{figure}
+
+\subsection{Relationship between Structure and Immune infiltration}
+
+\subsubsection{Immune quantification}
+
+CD8 and FOXP3 were assessed in OV04 samples.
+
+\subsection{Speed/Quantity model}
+
+\subsection{Collagen structure analysis}
