@@ -48,7 +48,7 @@ SHG microscopy at wavelength 850nm was performed on the Leica SP5 microscope and
 The package \textbf{dbscan} in R was used for density based clustering analysis. The mathematics of this method is discussed in the Methods. 
 
 \section{Results}
-Having found in the previous chapter that the specific localisation of several immune infiltrates was an important factor in the prognosis of patients, I wanted to investigate the structure of tissue sections and assess the impact of structure on immune infiltrate. I wanted to use both H&E and Cytokeratin stained images to derive this structure. The use of an epithelial marker was to validate tissue classification of H\&E and to validate structures across multiple sections from the same core.
+Having found in the previous chapter that the specific localisation of several immune infiltrates was an important factor in the prognosis of patients, I wanted to investigate the structure of tissue sections and assess the impact of structure on immune infiltrate. I wanted to use both H&E and Cytokeratin stained images to derive this structure. Cytokeratin 7 was used as an epithelial marker to have a gold standard for structure analysis and to validate tissue classification of H\&E so that structures can be compared across multiple sections from the same core.
 
 The morphologies discussed by Lisio et al are solid architecture, glandular architecture with slit-like spaces, papillary architecture and cribriform and pseudoendometroid architecture\cite{Lisio2019Feb} and in order to assess whether these structures could be automatically derived from images, the segmentation of tumour and stroma cells must first be acquired. 
 
@@ -197,7 +197,18 @@ In order to do this I labelled each tissue section as Solid, Glandular or Unknow
 \subsubsection{Immune quantification}
 
 CD8 and FOXP3 were assessed in OV04 samples.
+\begin{itemize}
+    \item Correlation between CD8, FOXP3 and edge cells
+    \item Immune cells for different structures
+\end{itemize}
 
 \subsection{Speed/Quantity model}
 
 \subsection{Collagen structure analysis}
+
+\section{Discussion}
+
+
+In spite of multiple data sources implying a continuous distribution of densities of infiltration of immune cells into tumours, the literature still dichotimises immune infiltrate and even categorises a subclass of tumour structures as immune reactive, an approach which fails to interpret that differences in structure may influence the immune cells which can infiltrate and the rate at which they do.
+
+I found that the number of X was correlated with immune infiltrate. 

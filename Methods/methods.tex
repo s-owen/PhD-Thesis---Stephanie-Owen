@@ -159,6 +159,8 @@ Spatial statistics can most easily be carried upon 2D point patterns. In such an
 \end{equation}
 We will see that these assumptions are violated but information can still be gleaned from these measurements as long as the consequences and limitations of such assumptions are understood.
 
+The spatial patterns of a distribution can be split into first order properties (density variation) and second order properties (how points influence the location of others).
+
 \subsection{Density based analysis}
 
 \subsubsection{Global density}
@@ -178,14 +180,35 @@ Where $\lambda$ is the density and $E$ is the expected number of points in the r
 \subsubsection{DBSCAN}
 DBSCAN stands for Density based clustering. There are many clustering methods in existence but when clustering spatial data rather than data in information space, DBSCAN has been shown to be best at clustering groups\cite{}.
 
+\subsubsection{Getis Ord Hotspot Analysis}
+Getis Ord hotspot analysis assesses whether the density of events (eg. immune cells) is higher in a subregion than on average in the region overall. 
+
+The Z score for such a region is 
+\begin{equation}
+    z_i = \sum_{j=1}^{n}w_{i,j}c_{j} - \frac{\bar{c}\sum_{j=1}^{n}w_{i,j}}{SU}
+\end{equation}
+
+where S and U are given by the following:
+
+\begin{equation}
+    S = \sqrt{\frac{\sum_{j=1}^{n}c_{j}^2}{n} - (\bar{c})^2 }
+\end{equation}
+
+\begin{equation}
+    U = \sqrt{\frac{n\sum_{j=1}^{n}w_{i,j}^2 - (\sum^n_{j=1}w_{i,j})^2}{n-1} }
+\end{equation}
+
+
 \subsection{Distance based analysis}
+\subsubsection{Average Nearest Neighbour}
+This analysis measures the average distance from each point to its nearest neighbouring point. 
 
 \subsubsection{k-nearest neighbour}
 k-nearest neighbour method derives for each point in a point pattern, the $k^{th}$ nearest neighbour to it.
 The theoretical expected distance \ref{eq:knn} to the nearest neighbour in a random 2D point pattern is derived as follows;
 
 \begin{equation}
-    
+
 \end{equation}
 
 \begin{equation}
@@ -194,24 +217,55 @@ The theoretical expected distance \ref{eq:knn} to the nearest neighbour in a ran
 \end{equation}
 Where $\lambda$ is the global density of points.
 
+\subsubsection{Pair Correlation function}
 
-\begin{figure}
-    \centering
-    \includegraphics{Chapter3/Figs/knn.PNG}
-    \caption{Add these equations to describe distances}
-    \label{fig:knnequations}
-\end{figure}
+The $g$ function sums the number of points within a narrow distance band.
 
 \subsection{Intensity analysis}
 
-The Grey Level Co-occurence Matrix (GLCM)\cite{GLCM} measures texture features based on pixel intensities.
-These include the following:
+The Grey Level Co-occurence Matrix (GLCM)\cite{GLCM} measures texture features based on second order statistics based upon pixel intensities.
+
+
+$P_{ij}$ is the $i,j$ element of the normalized GLCM. $\mu$ is the mean of the GLCM.
+
+The statistics that are commonly calculated on the GLCM\cite{haralick1973textural} include the following:
 
 \subsubsection{Entropy}
 Entropy is a measure of information mixing. Increasing disorder increases entropy. Shannon entropy is defined as \begin{equation}
-    H = \sum_{i=1} {p_i log p_i}
+    H = -\sum_{i=1} {p_i log p_i}
 \end{equation}
 
 Where $p_i$ is the probability of obtaining class $p$.
 
 Entropy can be defined on an image or image region based on pixel grayscale values.
+
+In the GLCM notation, entropy is:
+
+\begin{equation}
+    \mathrm{Entropy} = -\sum_{i,j=0}^{N-1} P_{ij} ln{P_{i,j}}
+\end{equation}
+
+\subsubsection{Energy}
+Sum of squared elements in the GLCM. 
+\begin{equation}
+    \sum^{N-1}_{i,j=0}(P_{ij}^2)
+\end{equation}
+
+
+\subsubsection{Contrast}
+Local variation in intensity, measuring the difference in neighbouring pixel values. \begin{equation}
+    \sum^{N-1}_{i,j=0}P_{i,j}(i-j)^2)
+\end{equation}
+
+\subsubsection{Homogeneity}
+This measures the tightness of the distribution of pixels values.
+\begin{equation}
+    \sum^{N-1}_{i,j=0} \frac{P_{i,j}}{1+(i-j)^2}
+\end{equation}
+
+\subsubsection{Correlation}
+This measures the correlation between neighbouring pixels, a perfectly correlated image would have correlation = 1. 
+\begin{equation}
+    \sum^{N-1}_{i,j=0} P_{ij} \frac{(i-\mu)(j-\mu)}{\sigma^2}
+\end{equation}
+

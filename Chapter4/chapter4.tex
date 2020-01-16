@@ -14,7 +14,7 @@
 
 \section[Introduction]{Introduction}
 
-As mentioned in the introduction, some methods of immunogenic analysis are capable of measuring many more markers simultaneously than standard IHC and IF. IMC is the best of such methods, allowing for measuring more than 20 markers on a single tissue section. This method allowed me to view additional markers for microenvironmental features such as collagen and hypoxia alongside immune markers of interest. As I wished to investigate the micro-environment in both epithelium and adjacent stroma I used the BriTROC and ICON7 cohorts to investigate this.
+As mentioned in the introduction, some methods of immune analysis are capable of measuring many more markers on a single section than standard IHC and IF. IMC is one of the best of such methods, allowing for measuring more than 20 markers on a single tissue section by conjugating antibodies with metal isotopes. This method allowed me to view additional markers for microenvironmental features such as collagen and hypoxia alongside a panel of immune markers that had been investigated in other samples. In order to investigate the micro-environment in both epithelium and the tumour-adjacent stroma I used the BriTROC and ICON7 cohorts to investigate this.
 
 \subsection{History of the project and roles}
 Sarwah Al-Khalidi originally intended to create an IMC panel for immune markers alone, I worked with SAK to include collagen in order to both better delineate stroma tissues from epithelium and investigate the structure of collagen and its interaction with immune cells. Sarwah Al-Khalidi (SAK) carried out the panel optimization and staining on the BriTROC cohort and arranged for Fatime Cosaj(FC) to carry out the staining with the same panel on the ICON7 cohort using the same protocols as optimized by SAK. I arranged for Richard Grenfell (RG) to carry out the imaging of the stained ICON7 slides on the same machine as the BRITROC cohort had been done.
@@ -47,6 +47,8 @@ From the markers included in the IMC panel, the subset of these of markers that 
 \subsubsection{ICON7}
 ICON7 was an international, phase 3, open-label, randomised trial undertaken at 263 centres in 11 countries across Europe, Canada, Australia and New Zealand. Eligible adult women with newly diagnosed ovarian cancer that was either high-risk early-stage disease (International Federation of Gynecology and Obstetrics [FIGO] stage I–IIa, grade 3 or clear cell histology) or more advanced disease (FIGO stage IIb–IV), with an Eastern Cooperative Oncology Group performance status of 0–2, were enrolled and randomly assigned in a 1:1 ratio to standard chemotherapy (six 3-weekly cycles of intravenous carboplatin [AUC 5 or 6] and paclitaxel 175 mg/m2 of body surface area) or the same chemotherapy regimen plus bevacizumab 7·5 mg per kg bodyweight intravenously every 3 weeks, given concurrently and continued with up to 12 further 3-weekly cycles of maintenance therapy. Randomisation was done by a minimisation algorithm stratified by FIGO stage, residual disease, interval between surgery and chemotherapy, and Gynecologic Cancer InterGroup group. The primary endpoint was progression-free survival; the study was also powered to detect a difference in overall survival. Analysis was by intention to treat. This trial is registered as an International Standard Randomised Controlled Trial, number ISRCTN91273375\cite{Perren2011Dec, BibEntry2020Jan}. Figure \ref{fig:icon_remark} is a REMARK diagram of samples analysed. TMA prepared by MRC.
 
+ICON7 had cores sampled specifically from Epithelium and adjacent stroma, making it ideal for measurement of the microenvironment and measurement of both tumour and stroma in a single section which had been limited to a subset of the patients in previous cohorts.
+
 \subsection{Immuno Metal Conjugation}
 The protocol for IMC staining and imaging was carried out as described in Section \ref{sec:sarwah_staining}.
 
@@ -71,6 +73,13 @@ Before analysing the interaction between these immune cells and these single pop
  In order to clean the data, I carried out hot-spot removal in python using a median filter with a 3x3 pixel area (see Code \ref{script:1}).
  I built a classifier in Halo to distinguish epithelial tissue from low density and high density collagen, specified by the intensity of the Collagen1 marker over small areas.
  I built other cell segmentation classifiers based on nuclear DNA1 and DNA2 marker stainings to segment nuclei and classify cells. 
+ 
+ \begin{figure}
+     \centering
+     \includegraphics{IMC_example}
+     \caption{Example of }
+     \label{fig:IMC_example}
+ \end{figure}
 
 \subsection{Cell quantities and correlations}
 
@@ -95,7 +104,14 @@ Figures \ref{fig:britroc_corr_scatt} and \ref{fig:britroc_corr_heat} show the co
 \subsection{Principal Component Analysis}
 I carried out a similar PCA to Chapter 1 to analyse the key patterns across the. The first component was X.
 
-\subsection{Comparing cell densities between high density and low density collagen}
+\subsection{Comparing immune cell densities between epithelium, high density and low density collagen}
+
+CD8
+CD68
+CD45RO
+CD3
+
+As shown here, dense collagen fibres exclude immune cells, loose collagen has a higher infiltration than epithelium.
 
 \subsection{Collagen structure analysis}
 

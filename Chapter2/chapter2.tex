@@ -174,6 +174,34 @@ In clinical reporting, quantifying immune populations in exclusively tumour epit
 
 Multivariable Cox regression analysis including all infiltrates and stage was carried out on patients with complete data for all infiltrates (n=152) (Table 2).  In this model only stage and CD68$^+$ stromal infiltrate were significant predictors of survival. 
 We then refined the model by removing the least significant elements (defined as those with p>0.1) (Table 2, n=152). Interestingly, we found that the p-values for CD68$^+$ and CD45RO$^+$ stromal infiltrates in the refined model become less significant and the hazard ratios are attenuated in comparison to both the univariable regression and the full model. This is likely due to the inability of Cox regression to distinguish with confidence whether stromal CD45RO$^+$ or CD68$^+$ density is the most significant predictor when there is a strong correlation between all the immune variables.
+\begin{landscape}
+\begin{table}[]
+    \centering
+    \begin{tabular}{llllllll}
+    
+		& & &&		Univariable && \multicolumn{2}{c}{	Multivariable* 
+(adjusted for stage)} \\
+								
+&	Functional Form &	Evaluable cases&	Tissue compartment&	HR &	p-value	& HR &	p-value	\\ \hline
+CD8+ &	log10 &	301	&Epithelium&	0.89&	0.15&	0.83&	0.027\\	
+&	log10&	202&	Stroma&	0.97&	0.74&	0.93&	0.40\\	
+&	log10&	315&	Average&	0.79&	0.010&	0.72&	0.0006\\	
+CD45RO+&	log10&	290&	Epithelium&	0.86&	0.033&	0.85&	0.022\\	
+	&log10&	196&	Stroma&	0.76&	0.001&	0.76&	0.0007\\	
+	&log10&	306&	Average&	0.82&	0.006&	0.80&	0.003\\	
+CD68+&	linear&	293&	Epithelium&	0.99&	0.67&	0.99&	0.43\\	
+&	log10&	226	&Stroma	&0.53&	0.003&	0.44&	0.0003	\\
+&	log10&	308	&Average&	0.67&	0.042&	0.62&	0.017\\	
+Stage1 & - &	312&	Localised&	1&	0&	1&	0	\\
+	& & &		Regional&	1.47&	0.26&	1.15&	0.25\\	
+	&	&&	Distant	&3.96&	<<0.001&	5.58&	<<0.001	\\
+	&	&&	Unstaged&	3.35&	<0.001&	3.34&	<<0.001	\\ \hline
+
+\end{tabular}
+    \caption[Individual immune infiltrates Cox regression]{Cox proportional hazards survival analysis for individual infiltrates.}
+    \label{tab:coxsurv}
+\end{table}
+\end{landscape}
 
 \begin{figure}
     \centering
@@ -183,10 +211,32 @@ We then refined the model by removing the least significant elements (defined as
 \end{figure}
 
 
+\subsection{Combined model}
+\begin{table}[]
+    \centering
+    \begin{tabular}{llcccc} \hline
+&&	Multivariable & (all combined) &	Refined model &\\ \hline
+	&&	HR&	p-value&	HR&	p-value\\
+CD8+&	Epithelium&	0.96&	0.81&	-	&-\\
+	&Stroma&	1.07	0.63	&-&	-\\
+CD45RO+&	Epithelium&	1.12&	0.37	&-&	-\\
+	&Stroma	&0.83	&0.09	&0.68&	0.11\\
+CD68+&	Epithelium&	1.16&	0.63	&-&	-\\
+	&Stroma	&0.53&	0.038&	0.88	&0.17\\
+Stage &&&&&\\
+&Localised&	1&	0&	1&	0\\
+&	Regional&	2.00&	0.16&	2.03&	0.14\\
+&	Distant&	4.82&	<<0.001&	4.70&	0.0001\\
+&	Unstaged	&8.15&	<<0.001&	8.25&	0.0001\\ \hline
+
+    \end{tabular}
+    \caption{}
+    \label{tab:cox_combined}
+\end{table}
+
 \subsection{Ratio of stromal immune infiltrate to intra-epithelial immune infiltrate is not prognostic.}
 
 The location of immune infiltrate in either the intra-epithelial or stromal regions is a micro-environmental factor that can only be derived from images. The ratio of tumour to stromal infiltrate may indirectly  measure properties of the ECM that allow for infiltration into the tumour core or measure the extent of the interaction of the immune cells with epithelial cells. As shown previously, stromal and intra-epithelial immune cell densities are correlated. I investigated whether the ratio of stromal infiltrate density to intra-epithelial immune infiltrate density was a significant predictor of risk in HGSOC using the Cox proportional hazards model.
-
 
 % latex table generated in R 3.3.2 by xtable 1.8-2 package
 % Thu Oct 19 15:01:03 2017
@@ -201,11 +251,11 @@ The location of immune infiltrate in either the intra-epithelial or stromal regi
 CD8$^+$
 }\\
 Stroma:Tumour ratio & 0.069 & 1.072 & 0.179 & 0.386 & 0.700 \\ 
-   \hline
+ 
 \multicolumn{5}{l}{CD45RO$^+$
 }\\
 Stroma:Tumour ratio & -0.105 & 0.900 & 0.177 & -0.596 & 0.551 \\ 
-   \hline
+
 \multicolumn{5}{l}{
 
 CD68$^+$
