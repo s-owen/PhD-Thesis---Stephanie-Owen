@@ -68,22 +68,53 @@ Before analysing the interaction between these immune cells and these single pop
 
 \subsection{BriTROC summary}
 \subsection{ICON7 summary}
+There were X patients.
 
 \subsection{IMC image analysis}
- In order to clean the data, I carried out hot-spot removal in python using a median filter with a 3x3 pixel area (see Code \ref{script:1}).
+ IMC images contain hot pixels distributed randomly across the image, in order to clean the data, I carried out hot-spot removal in python using a median filter with a 3x3 pixel area (see Code \ref{script:1}).
+ 
  I built a classifier in Halo to distinguish epithelial tissue from low density and high density collagen, specified by the intensity of the Collagen1 marker over small areas.
- I built other cell segmentation classifiers based on nuclear DNA1 and DNA2 marker stainings to segment nuclei and classify cells. 
+ I then built cell segmentation algorithms based on nuclear DNA marker staining to segment nuclei. I then used the IMC marker panel to classify cells based on their nuclear and cytoplasmic staining. An example of tissue segmentation and cell segmentation and classification of ICON7 and BRITROC image is shown in Figure \ref{fig:IMC_example}.
  
  \begin{figure}
      \centering
-     \includegraphics{IMC_example}
-     \caption{Example of }
+     \includegraphics[width=0.5\textwidth]{Chapter4/figs/Thesis-09.png}
+     \caption{Example of BRITROC and ICON7 classifier region and cell markup from HALO on IMC images.}
      \label{fig:IMC_example}
  \end{figure}
+ 
+\subsubsection{IMC validation}
 
-\subsection{Cell quantities and correlations}
+In order to validate the tissue and cell classification of the IMC, I used multiplexed IHC from serial sections of the same cohort to compare. Figure \ref{fig:IMC_IHC_corr} shows the correlation between IHC and IMC derived CD8/CD68 and between IMC and IHC derived stroma/tumour quantities.
 
-The first investigation of this dataset was to investigate the correlations between immune populations to validate the results found in earlier chapters and to build up a picture of which features of the micro-environment are connected.
+\begin{figure}
+    \centering
+    \includegraphics{corr_IMC}
+    \caption{Correlation between the epithelium quantity, CD8 cell density and CD68 cell density as measured in IHC and IMC on the BRITROC cohort.}
+    \label{fig:IMC_IHC_corr}
+\end{figure}
+
+\subsection{Exploratory data analysis of TMA1}
+
+The BRITROC cohort composed 3 TMAs in triplicate, I decided to use the first TMA in order to do an exploratory analysis for hypothesis generation. I would then be able to test the statistical significance of such hypotheses on both the other two TMAs and the ICON7 cohort. 
+
+The first exploratory investigation of this dataset was to investigate the correlations between immune populations to validate the results found in earlier chapters and to build up a picture of which features of the micro-environment are connected.
+
+I first investigated the correlation between numbers of CD3, CD8 and PD-1 positive cell areas in samples.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Chapter4/figs/BRITROC_CD3_CD8_PD-1_corr.png}
+    \caption{CD3, CD8, PD-1}
+    \label{fig:CD8_CD3_PD1}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter4/figs/BRITROC_CD163_CD68_PD-1_corr.png}
+    \caption{CD163, CD68, PD-1}
+    \label{fig:CD163_CD8_PD1}
+\end{figure}
 
 \begin{figure}
     \centering
@@ -94,7 +125,7 @@ The first investigation of this dataset was to investigate the correlations betw
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{Chapter4/figs/Britroc_cell_correlation.png}
+    \includegraphics[width=0.5\textwidth]{Chapter4/figs/Britroc_cell_correlation.png}
     \caption{Heatmap of correlations between number of cells positive for each marker.}
     \label{fig:britroc_corr_heat}
 \end{figure}
@@ -102,16 +133,22 @@ The first investigation of this dataset was to investigate the correlations betw
 Figures \ref{fig:britroc_corr_scatt} and \ref{fig:britroc_corr_heat} show the correlations between the number of CD8+, CD68+, CA9, CK7, Collagen1, CD45RO, CD56 and Ki-67+ cells. CD8, CD68 and CD45RO, the populations investigated in Chapter 1, show the strongest positive correlations. I also see the negative correlation we would expect between the number of Collagen and Cytokeratin positive cells as these cells are mutually exclusive and determine the majority of the structure of a tissue. Despite seeing a higher density of infiltrate in stromal regions in earlier chapters, we see a negative correlation between the number of collagen positive cells and the number of immune cells in these samples.
 
 \subsection{Principal Component Analysis}
-I carried out a similar PCA to Chapter 1 to analyse the key patterns across the. The first component was X.
+In order to carry out a meaningful analysis across such a large number of measurements in multiple tissue regions, I used principal component analysis as in Chapter 2 in order to examine the patterns across the immune infiltrates. 
 
 \subsection{Comparing immune cell densities between epithelium, high density and low density collagen}
 
-CD8
-CD68
-CD45RO
-CD3
+\subsubsection{Macrophages}
 
-As shown here, dense collagen fibres exclude immune cells, loose collagen has a higher infiltration than epithelium.
+CD68 and CD163 are both macrophage markers. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{Chapter4/figs/Thesis-10.png}
+    \caption{Distribution of densities of CD68+ and CD163+ cells in the dense collagen, loose collagen and epithelial regions of the tumour section.}
+    \label{fig:distribution}
+\end{figure}
+
+The area density of the immune infiltrates does not vary between, given that the nuclear 
 
 \subsection{Collagen structure analysis}
 

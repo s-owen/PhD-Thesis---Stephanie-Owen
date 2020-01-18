@@ -27,15 +27,15 @@ Multiple patient cohorts were used throughout the thesis and are detailed at the
 \section{Chromogenic Immunohistochemistry (IHC)}
 
 \subsection{Sample preparation}
-3μm sections of FFPE blocks were cut using a Leica microtome, transferred to a water bath pre-heated to 60${^\circ}$C and collected on a glass slides. The sections were dried over-night at 37${^\circ}$C then baked at 60${^\circ}$C for 1h. 
+$3\mu$m sections of FFPE blocks were cut using a Leica microtome, transferred to a water bath pre-heated to 60${^\circ}$C and collected on a glass slides. The sections were dried over-night at 37${^\circ}$C then baked at 60${^\circ}$C for 1h. 
 
 \subsection{Manual Staining} 
-\subsection{OV04/BRITROC}\label{sec:sarwah_staining}
+\subsubsection{OV04 and BRITROC}\label{sec:sarwah_staining}
 FFPE sections were rehydrated using the Leica Autostainer ST020 by incubating them twice for 10 min in xylene, followed by two 5 min incubations in 100\% ethanol, one 5 min incubation in 70\% Ethanol and finally washing them in water. Antigens were retrieved in a Tris (10 mmol)-EDTA (1mM) buffer (pH 9.2) preheated to 96${^\circ}$C in a water bath. After 1h incubation, slides were cooled in a water bath for 5 min, washed in Milli-Q water for 5 min and incubated in3\%BSA-PBS for 1h in a hydration chamber at room temperature. ImmEdge pen was used to draw a hydrophobic border around the tissue, and 200μl of primary antibody pre-diluted to the desired concentration in 1\%BSA-PBS were added to the sections. Following an overnight incubation in a hydration chamber at 4$^{\circ}$C, the antibody solution was drained and the slides were washed twice for 5 min in 1\% Tween-TBS, succeeded by two washes for 5 min in TBS. For HRP-conjugated primary antibodies, DAB was directly added to the slides. For secondary antibody staining, pre-diluted secondary antibody was added and incubated at room temperature for 30 min, followed by 2 washes in TBS. The slides were incubated in DAB chromogen for
 5 min, washed in Milli-Q water, and dehydrated and cover-slipped using the Leica Autostainer ST020.
 
 \subsubsection{SEARCH}
-Sectioning and was carried out as following on the SEARCH cohort. Microarray slides composed of FFPE embedded ovarian tumour cores were dewaxed and rehydrated prior to heat induced epitope retrieval (HIER) using a pressure cooker and a citrate-based antigen unmasking solution (Vector Laboratory). Detection of CD8$^+$ T cells, CD45RO$^+$ memory lymphocytes and CD68$^+$ macrophages was performed using the mouse anti-human CD8 (Clone C8/144B, Dako), mouse anti-human CD45RO (Clone UCLH, Dako) and mouse anti-human CD68 (Clone M0876, Dako) antibodies, using ultrasensitive Polymer-HRP IHC Detection system (Biogenex). Immunohistochemical protocols and slide hybridizations were carried out manually. Sections were counterstained with haematoxylin and mounted with DPX mounting medium (Sigma). Stained slides were scanned using the Panoramic Slash Scanner (3D Histech).
+Sectioning and staining was carried out as following on the SEARCH cohort. Microarray slides composed of FFPE embedded ovarian tumour cores were dewaxed and rehydrated prior to heat induced epitope retrieval (HIER) using a pressure cooker and a citrate-based antigen unmasking solution (Vector Laboratory). Detection of CD8$^+$ T cells, CD45RO$^+$ memory lymphocytes and CD68$^+$ macrophages was performed using the mouse anti-human CD8 (Clone C8/144B, Dako), mouse anti-human CD45RO (Clone UCLH, Dako) and mouse anti-human CD68 (Clone M0876, Dako) antibodies, using ultrasensitive Polymer-HRP IHC Detection system (Biogenex). Immunohistochemical protocols and slide hybridizations were carried out manually. Sections were counterstained with haematoxylin and mounted with DPX mounting medium (Sigma). Stained slides were scanned using the Panoramic Slash Scanner (3D Histech).
 
 \subsection{Automated Staining}
 Automated staining was carried out using the Ventana Discovery Ultra platform.  All bulk reagents used were purchased from Roche and are listed in Table \ref{table:bulk_reagents}. The slides were rehydrated by incubating them in EZ prep solution for 32 min at 69${^\circ}$C, then incubated for 1h in VentanaCell Conditioning buffer 1 (CC1) at 96${^\circ}$C for antigen retrieval (pH 8.5). Hydrogen peroxide was then applied and incubated for 4 min to quench endogenous peroxidase activity, followedby primary antibody incubation for 1h at 37${^\circ}$C. Details of antibodies used for chromogenic IHC are listed in Table \ref{table:ihc_antibodies}.  After a16 min incubation with an HRP-conjugated secondary antibody, the chromogenic signal was developed in either 3, 3’-Diaminobenzidine (DAB) chromogen for 8 min, in Purple chromogen for 40 min, in Yellow chromogen for 28 min or in Teal chromogen for 8 mins. For chromogenic counter-staining, the slides were incubated for 4 min in Copper,8 min in haematoxylin and 4 min in Bluing Reagent. Slides were washed with Reaction Buffer after each incubation. As a negative control, Mouse IgG, Rabbit IgG and GoatIgG isotype replaced mouse, rabbit and goat primary antibodies, respectively. Stained slides were dehydrated using the Leica Autostainer ST020, manually cover-slipped and digitally scanned by Aperio Scanscope XT. 
@@ -127,9 +127,11 @@ Analysis of images taken from both chromogenic IHC and IMC was done using the HA
 \section{Statistical Analysis}  %Section - 1.4
 \label{section1.4}
 
-R (version 3.5.1) was used for statistical analysis and R markdown documents are provided in Supplementary Methods that reproduce all results. All count data were transformed to log base 10 after adding a small offset to zero values. Wilcoxon signed rank test was used to compare the mean infiltrate between groups. Continuous data were presented as median and interquartile range (IQR) and groups were compared by the Kruskal–Wallis and pairwise Kruskal-Wallis tests. Discrete data were presented as count and percentage.  
+R (version 3.5.1) was used for statistical analysis and R markdown documents are provided in Supplementary Methods that reproduce all results. 
 
-The functional form of immune variables was assessed using comparison with cubic splines. The best approximations to the functional forms were carried forward for the Cox models. 
+
+\subsection{Quantitative immune infiltrate}
+All count data were transformed to log base 10 after adding a small offset to zero values. Continuous data were presented as median and interquartile range (IQR) and groups were compared by the Kruskal–Wallis, pairwise Kruskal-Wallis tests and Wilcoxon signed rank test was used to compare the mean infiltrate between groups. Discrete data were presented as count and percentage.  
 
 I carried out quality assurance tests for spatial bias across TMAs and investigated the sources of varying tissue area visually using heatmaps and statistically using Shapiro-Wilk tests.
 
@@ -138,12 +140,14 @@ I carried out quality assurance tests for spatial bias across TMAs and investiga
 
 Cox regression was used to examine the relationship between predictors $X$ and the hazard.
 
+The functional form of immune variables was assessed using comparison with cubic splines. The best approximations to the functional forms were carried forward for the Cox models. 
+
 The hazard function is given by the following formula:
 \begin{equation}H(t) = H_0(t) e^ {b_1 X_1 + ... + b_n X_n} \end{equation} 
 
 Where $H$ is the hazard, the predictors are denoted $X_n$ and Cox regression estimates the coefficients of the predictors $b_n$. The proportional hazard model is semi-parametric as there is an assumption that the hazard is a linear function of the predictors and that the hazards are proportional (the coefficients are not a function of time). There are no assumptions about the form of the baseline hazard function $H_0(t)$. 
 
-The Akaike Information Criterion (AIC), equation \ref{eq:AIC} as detailed in the Methods, was used to compare the performance of survival models, which includes the loglikelihood of the model $\hat{L}$ and a penalty on the number of terms, $k$ to reduce overfitting. 
+The Akaike Information Criterion (AIC), equation \ref{eq:AIC}, was used to compare the performance of survival models, which includes the loglikelihood of the model $\hat{L}$ and a penalty on the number of terms, $k$ to reduce overfitting. 
 
 \begin{equation}
 \label{eq:AIC}
@@ -154,7 +158,7 @@ The Akaike Information Criterion (AIC), equation \ref{eq:AIC} as detailed in the
 
 Spatial statistics can most easily be carried upon 2D point patterns. In such analyses cells are assumed to be points with coordinates $(x,y)$ and zero radius $r=0$. The value of the center of the point for each cell is given in equation \ref{eq:1}. 
 
-\begin{equation}    x=\frac{x_{max} + x_{min}}{2}        y = \frac{y_{max} + y_{min}}{2}
+\begin{equation}    x=\frac{x_{max} + x_{min}}{2}  ,      y = \frac{y_{max} + y_{min}}{2}
 \label{eq:1}
 \end{equation}
 We will see that these assumptions are violated but information can still be gleaned from these measurements as long as the consequences and limitations of such assumptions are understood.

@@ -28,7 +28,7 @@ As shown in the previous section, stromal and epithelial immune infiltration may
 \end{figure}
 
 \section{Collaborators and Roles}
-Sarwah Al-Khalidi(SAK) stained the OV04 TMA sections for CK7 and H&E.
+Sarwah Al-Khalidi(SAK) stained the OV04 TMA sections for CK7 and H\&E.
 
 \section{Methodology}
 \subsection{Patient Cohorts}
@@ -48,7 +48,7 @@ SHG microscopy at wavelength 850nm was performed on the Leica SP5 microscope and
 The package \textbf{dbscan} in R was used for density based clustering analysis. The mathematics of this method is discussed in the Methods. 
 
 \section{Results}
-Having found in the previous chapter that the specific localisation of several immune infiltrates was an important factor in the prognosis of patients, I wanted to investigate the structure of tissue sections and assess the impact of structure on immune infiltrate. I wanted to use both H&E and Cytokeratin stained images to derive this structure. Cytokeratin 7 was used as an epithelial marker to have a gold standard for structure analysis and to validate tissue classification of H\&E so that structures can be compared across multiple sections from the same core.
+Having found in the previous chapter that the specific localisation of several immune infiltrates was an important factor in the prognosis of patients, I wanted to investigate the structure of tissue sections and assess the impact of structure on immune infiltrate. I wanted to use both H\&E and Cytokeratin stained images to derive this structure. Cytokeratin 7 was used as an epithelial marker to have a gold standard for structure analysis and to validate tissue classification of H\&E so that structures can be compared across multiple sections from the same core.
 
 The morphologies discussed by Lisio et al are solid architecture, glandular architecture with slit-like spaces, papillary architecture and cribriform and pseudoendometroid architecture\cite{Lisio2019Feb} and in order to assess whether these structures could be automatically derived from images, the segmentation of tumour and stroma cells must first be acquired. 
 
@@ -59,9 +59,11 @@ The TMA previously constructed for this cohort contained 40 patients with HGSOC.
 
 \begin{table}[]
     \centering
-    \begin{tabular}{c|c}
+    \begin{tabular}{lc}
+    \hline
        N  &  40 \\
         Age &  77 (60-90)
+    \hline
     \end{tabular}
     \caption{OV04 study patient characteristics}
     \label{tab:OV04_patient}
@@ -84,11 +86,13 @@ Images of tissue sections stained with both H\&E and a CK7 marker were analysed.
 
 \begin{table}[]
     \centering
-    \begin{tabular}{l|cc}
-       &   Stroma  &   Tumor\\
+    \begin{tabular}{llcc}
+    \hline
+    & & \multicolumn{2}{c}{Label}\\
+    &   &   Stroma  &   Tumor\\
        \hline
-Stroma   &    1263    &     2\\
-Tumor   &      2     &  346 \\
+Classification&Stroma   &    1263    &     2\\
+&Tumor   &      2     &  346 \\
          
     \end{tabular}
     \caption[Confusion matrix for QuPath CK based classifier.]{Confusion matrix for QuPath CK based classifier. Classifier accuracy is 98.75\% (n=1613).}
@@ -100,7 +104,7 @@ Tumor   &      2     &  346 \\
     \centering
     \begin{tabular}{llcc}
     \hline
-       &           &  Label &\\
+       &           &  \multicolumn{2}{c}{Label}\\
        &           &    Stroma	& Tumor\\ 
 \hline
 Classification & Stroma	&  2653	 &   40\\
@@ -111,6 +115,14 @@ Classification & Stroma	&  2653	 &   40\\
     \label{tab:classifier_he}
 \end{table}
 
+The classifiers both perform well and as further validation across the image types, figure\ref{fig:correlation_tumourarea} shows that the percentage of epithelial cells in each image are strongly correlated, as would be expected from serial sections. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Chapter3/Figs/correlation_TS_he_Ck.png}
+    \caption{Correlation between percentage epithelium measured via H\&E and that measured by analysis of an image of a CK stained serial section.}
+    \label{fig:correlation_tumourarea}
+\end{figure}
 
 \subsection{High Grade Serous tissue structure analysis}
 
@@ -124,21 +136,21 @@ In order to define a tissue structure of each core I selected several properties
 \end{itemize}
 
 \subsubsection*{Stroma/Tumour percentage}
-This most basic measure of tissue composition was utilized in the previous chapter. In this chapter I measured this percentage as both an area and a number proportion for each image type. Figure\ref{fig:correlation_tumourarea} shows that the two values are strongly correlated as would be expected from serial sections. 
+This most basic measure of tissue composition was utilized in the previous chapter. In this chapter I measured this percentage as both an area and a number proportion for each image type. The distribution of epithelial cell percentages are shown in Figure \ref{fig:epi_percent}. As shown these overlap. 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{Chapter3/Figs/correlation_TS_he_Ck.png}
-    \caption{Correlation between percentage epithelium measured via H&E and that measured by analysis of an image of a CK stained serial section.}
-    \label{fig:correlation_tumourarea}
+    \includegraphics[width=0.5\textwidth]{Chapter3/Figs/boxplot_epithelium.png}
+    \caption{Boxplots of the distribution of epithelial percentages in the OV04 cohort based upon H\&E and CK7 stained images}
+    \label{fig:epi_percentl}
 \end{figure}
 
 \subsubsection*{Invasive front}
-In a purely diffusive model where immune infiltrate travels from the stroma into the epithelial nests, epithelial infiltrate would be proportional to the surface area of the epithelial nodules that are exposed to the surrounding stroma. In order to gain a measure of this surface area, I defined edge cells as those cells which had a nearest neighbour of a differing class. The surface area to volume ratio can be estimated in 2D as 
-\begin{equation}
-    
-\frac{N_{edge cells}}{N_{\mathrm{epithelial}}}
-\end{equation}
+In a purely diffusive model where immune infiltrate travels from the stroma into the epithelial nests, epithelial infiltrate would be proportional to the surface area of the epithelial nodules that are exposed to the surrounding stroma. In order to gain a measure of this surface area, I defined edge cells as those cells which had a nearest neighbour of a differing class. The surface area to volume ratio of a sphere is proportional to $\frac{1}{r}$ as is the ratio of a circumference to the area of a circle, as such the surface area of a nodule to its volume can be estimated as the following:
+
+\[\frac{SA}{Vol} ~ \frac{(N_{\mathrm{edge}})} {(N_{\mathrm{epi}})}\]
+
+Where $N_{\mathrm{edge}}$ is the number of cells on the edge of an epithelial cluster and $N_{\mathrm{epi}}$ is the number of cells making up the epithelial cluster.
 
 \begin{figure}
     \centering
@@ -204,7 +216,14 @@ CD8 and FOXP3 were assessed in OV04 samples.
 
 \subsection{Speed/Quantity model}
 
+\subsection{Immunofluorescence}
+In order to assess multiple immune markers on a single slide I decided to use Immunfluorescence, I worked with Jodi Miller (JM) from the core to arrange for an optimized panel to measure CD8, CD68 and nuclear stains simultaneously.
+The original suggestions were not successful on FFPE, with large amounts of Autofluorescence from FFPE section as well as overlapping spectra meaning signal could not be distinguished.
+
+Eventually we used DAPI, CD8 and CD68 to obtain a clear image of cells on the section. 
+
 \subsection{Collagen structure analysis}
+Second Harmonic Generation (SHG) uses harmonic wave generation by Collagen fibres to image. I used both IMC and SHG on the IF slide to analyse Collagen structure.
 
 \section{Discussion}
 
