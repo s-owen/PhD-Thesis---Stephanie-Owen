@@ -59,9 +59,19 @@ Automated staining was carried out using the Ventana Discovery Ultra platform.  
     OmniMap Anti-Rb-HRP Secondary Antibody & 760-4311 \\
     \hline
     \end{tabular}
-    \caption{Caption}
+    \caption{Bulk Reagents}
     \label{table:bulk_reagents}
 \end{table}
+
+\section{Second Harmonic Generation}
+
+Second Harmonic Generation (SHG) images were acquired from unstained and IHC stained tumour
+sections to assess the collagen content. SHG microscopy was
+performed using a Leica SP5 laser scanning confocal microscope (Leica Microsystems Inc,
+Wetzlar, Germany) with a mode‐locked fs‐pulsed IR‐laser (Coherent Chameleon Ultra II, Ti‐
+Sapphire, 680‐1080nm excitation range; Coherent Scotland Ltd., Glasgow, UK). Illumination and emission wavelengths for the acquisition of collagen SHG signal were determined from illumination and emission spectra as 920nm and 460nm respectively, \textit{and confirmed according to the principles of SHG (see appendix C, section 7.4 for spectra)}. Images were acquired with an HC PL APO 40x oil immersion and 20x Dry objective. Once optimised, imaging acquisition parameters were kept constant across all imaging sessions. SHG microscopy images were acquired across multiple fields for optimisation and was acquired from a single TMA core for each patient. 
+
+The SHG signal over the whole image was quantified using ImageJ and the OrientationJ and GLCM plugins. The energy and entropy of each image were calculated using GLCM. Once optimised, threshold parameters were kept constant for all images. For each tumour core the mean SHG signal, entropy, energy were calculated. The image was then split into 100 squares and a minimum signal threshold was set, the non background squares were analysed for orientation and coherency of the fibres. 
 
 \section{Imaging Mass Cytometry}
 \subsection{Imaging Mass Cytometry (IMC) Antibody purification}
@@ -110,7 +120,7 @@ The manual staining  protocol outlined in  section \ref{sec:sarwah_staining} was
     \caption{IMC antibodies}
     \label{table:imc_antibodies}
 \end{table}
-Following the two washes in 1\% Tween-TBS and two washes in TBS, the slides were counter-stained with Cell-ID™Intercalator-Ir for 30 min at room temperature. The slides were then washed in Milli-Q water for 5 min, and air dried for at least 20 min before imaging on the Hyperion™Imaging System(Fluidigm). Images were acquired using a UV laser at a frequency of 200 Hz. Metals in each pixel ablated were plasma-ionised and their count was detected using Cytometry by Time of Flight (CyTOF) technology. This was used to generate a stack of false-colour images, each layer corresponding to a single metal and the intensity of each pixel reflects the amount of each antigen present. 
+Following the two washes in 1\% Tween-TBS and two washes in TBS, the slides were counter-stained with Cell-ID™ Intercalator-Ir for 30 min at room temperature. The slides were then washed in Milli-Q water for 5 min, and air dried for at least 20 min before imaging on the Hyperion™Imaging System(Fluidigm). Images were acquired using a UV laser at a frequency of 200 Hz. Metals in each pixel ablated were plasma-ionised and their count was detected using Cytometry by Time of Flight (CyTOF) technology. This was used to generate a stack of false-colour images, each layer corresponding to a single metal and the intensity of each pixel reflects the amount of each antigen present. 
 
 \subsection{Image analysis}
 Python was used for data cleaning and applying median filters.

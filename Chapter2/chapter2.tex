@@ -16,19 +16,15 @@ Immune infiltration is frequently manually assessed in pathology departments. Di
 Continuous data offers a large number of possibilities for analysis and across the literature there are many approaches. The majority of papers have focused on quantifying epithelial infiltrate alone. Regardless, tissue specific infiltrate requires segmenting the epithelial and stromal compartments and the identification of cells by thresholding for nuclei based on a nuclear stain. The stromal and epithelial immune infiltrate in a tissue section can then be quantified.  In this chapter I worked to complete simple analyses on a dataset from the SEARCH cohort that contained the density of CD$8^+$, CD45RO$^+$ and CD68$^+$ immune cells in epithelium and stroma for each patient and aimed to develop a robust statistical workflow for the analysis of quantitative digital pathology data. I could then expand upon this basic analysis myself and ask questions about model building, the relative importance of stromal and epithelial infiltration, the relationships between them. I aimed to fully investigate, compare and interpret quantities of infiltration in different tissue regions in order to build up a better idea of the compartmental nature of the immune response.
 
 \section{Collaborator Roles}
-Anne Montfort (AM) - Sample Sectioning, Staining, Image segmentation
-JMcD - Pathologist, Image segmentation
-Anna Piskorz - Sequencing
-Sarwah Al-Khalidi (SAK) - Resequencing of some samples
+Anne Montfort (AM) - Sample Sectioning, Staining, Image segmentation\\
+JMcD - Pathologist, Image segmentation\\
+Anna Piskorz - Sequencing\\
+Sarwah Al-Khalidi (SAK) - Resequencing of some samples\\
 
 \subsection{History of the project}
-This project began when a collaborator (AM) approached me with the raw, unexamined files from Definiens image analysis software, requiring a basic analysis of the relationship between cell count density and survival. 
+This particular part of the work began from collaboration with AM who approached me with raw files from Definiens image analysis software of CD8+, CD68+ and CD45RO+ stained slides, requiring data cleaning and manipulation and a basic analysis of the relationship between cell count density and survival. 
 
-In this part of my project, I went beyond this in many ways, investigating the TMAs for bias, extracted the outlying cores, investigated the distribution of the infiltrates in order to pick the right statistical tests. Along with the basic information about cell density and survival, I investigated model building, the functional forms of infiltrate density, combined multiple infiltrates with principal component analysis for the first time to investigate the underlying patterns of biology including quantifying the immune exclusion in a sample. 
-
-All analysis was done by myself and all further questions investigated beyond the relationship between individual infiltrates and survival, were proposed and approached by me.
-
-
+In this part of the PhD, I utilised this data set to build upon the foundational analysis that I carried out. Firstly investigating the TMAs for bias, extracting and examining the cores that were outlying in size or infiltration. I investigated the distribution of the infiltration densities and normalised them in order to use the correct statistical tests. Along with extracting and modelling the link between immune cell density and survival, I investigated more complex model building. I analysed varying functional forms of infiltrate density, combined multiple infiltrates with principal component analysis for the first time to investigate the underlying patterns of biology and did further analyses including quantifying and assessing the immune exclusion in samples. I also applied some similar analyses to the other subtypes of Ovarian Cancer in the cohort.
 
 \begin{figure}
     \centering
@@ -37,22 +33,24 @@ All analysis was done by myself and all further questions investigated beyond th
     \label{fig:visual_abstract}
 \end{figure}
 
-\section{Cohort}
+\section{SEARCH Cohort}
 
 Samples from 570 patients from the prospective SEARCH ovarian cancer population-based study had been used to construct tissue microarrays. Ethical approval was granted by the Eastern Multicenter Research Ethics Committee. Among the samples from 570 patients with primary epithelial ovarian tumours, 332 were high grade serous ovarian cancer patients. All cases underwent detailed histopathological review by a gynaecological pathologist (JM). Patients were staged as having localized, regional or distant disease (L/R/D).
 
 \section[Methods]{Methodology}
-\subsection{Immunohistochemistry}
-Immunohistochemistry was carried out upon the tissue sections by Anne Montfort (AM) according to the protocol in section \ref{sec:am_method}. Previously published PTEN immunostaining data was used where high PTEN expression was considered to be positive staining and low expression to be weak, heterogeneous or negative staining respectively\cite{PTEN_brenton}.
+\subsection{SEARCH Data Set}
+As mentioned, the immunohistochemical staining and initial utilization of Definiens software was carried out by AM. The methodology of all the data sets used in this section is outlined below and referred to in the Methods. 
+\subsubsection{Immunohistochemistry}
+Immunohistochemistry on the SEARCH samples was carried out upon the tissue sections by Anne Montfort (AM) according to the protocol in section \ref{sec:am_method}. Previously published PTEN immunostaining data was used where high PTEN expression was considered to be positive staining and low expression to be weak, heterogeneous or negative staining respectively\cite{RN17}.
 
-\subsection{Mutation data}
+\subsubsection{Mutation data}
 
-Sequencing and mutation analysis was carried out prior to this PhD by Anna Piskorz (AP). The coding regions of TP53 were sequenced by tagged-amplicon next generation sequencing as previously described\cite{20} and confirmed by immunohistochemical analysis using a 4-tier core system\cite{21}. Sequencing of germline mutations in the  \texit{BRCA1} and \texit{BRCA2} genes was performed as previously described.\cite{sequencing}. Some samples were resequenced by SAK following analysis highlighting issues in diagnosis.
+Sequencing and mutation analysis was carried out prior to this PhD by Anna Piskorz (AP). The coding regions of TP53 were sequenced by tagged-amplicon next generation sequencing as previously described\cite{RN18} and confirmed by immunohistochemical analysis using a 4-tier core system\cite{RN19}. Sequencing of germline mutations in the  \texit{BRCA1} and \texit{BRCA2} genes was performed as previously described\cite{RN20}. Some samples were resequenced by SAK following my initial exploratory analysis and datacleaning steps. The results of resequencing were integrated into the final analysis.
 
-\subsection{Immune cell quantification}
- The number of CD8$^+$ and CD45RO$^+$ cells per mm2 of epithelial and stroma areas, as well as the percentage of epithelial and stromal areas covered by CD68 staining, had been digitally determined using the Tissue Studio software (Definiens™).
+\subsubsection{Immune cell quantification}
+ The number of CD8$^+$ and CD45RO$^+$ cells in epithelial and stroma areas, the area of epithelial and stromal areas covered by CD68 staining and the total area of epithelium and stroma in each core, had been digitally determined using the Tissue Studio software (Definiens™).
 
-Figure \ref{fig:segmentation} shows examples of cell identification and classifications of tissue regions in the data set from this cohort.
+Figure \ref{fig:segmentation} shows examples of the cell segmentation and tissue classification in the data set from this cohort.
 
 \begin{figure}[htbp!] 
 \centering    
@@ -71,7 +69,7 @@ Bonferroni p-value corrections were carried out for all multiple testing. P < 0.
 
 \section{Results}
  
-As well as patients with High Grade Serous Ovarian Cancer, the SEARCH cohort included patients with Clear Cell, Endometrioid, Mucinous and Low Grade Serous Ovarian Cancer. These subpopulations have varying infiltration and drivers and as such I focused the first version of analysis on HGSOC patients alone. As such, before assessing the variations in tissue composition and infiltrate I assessed the makeup of the patient cohort and extracted the HGSOC subpopulation for the further analysis.
+As well as patients with High Grade Serous Ovarian Cancer, the SEARCH cohort included patients with Clear Cell, Endometrioid, Mucinous and Low Grade Serous Ovarian Cancer. These subtypes of Ovarian Cancer have vastly different cells of origin, different patterns of infiltration and different genomic drivers. As I was interested in understanding the differences within populations rather than across subtypes I extracted the HGSOC subpopulation for the initial analysis.
 
 \subsection{Patient characteristics}
 Figure {\ref{fig:remark_search}} shows the REMARK diagram for this study and Table \ref{table:clinical_SEARCH} shows the clinical characteristics of the 332 HGSOC patients from the study cohort. Immunohistochemical analyses on tissue microarrays (TMAs) were performed to detect CD8$^+$, CD45RO$^+$ and CD68$^+$ cells in tissue cores from primary ovarian specimens.  152 HGSOC cases were available for analysis after quality assurance, data cleaning and the reduction of the data set to only cases with complete results for CD8, CD45RO and CD68 staining in both epithelium and stroma as well as survival data. 
@@ -114,16 +112,25 @@ BRCA status		& 	wild type &	256 (86.2\%)\\
     \label{tab:clinical_SEARCH}
 \end{table}
 
- \subsection{Quality assurance and spatial bias}
- 
-One of the valuable things about analysing a large number of digitally imaged and segmented TMA cores is the ability to carry out quality checking for bias across TMAs and to evaluate the impact of and the variation in tissue area, something not measured in manual scoring. I examined the distribution of tissue area and ensured that the varying tissue area across TMAs was random. I did this visually using heatmaps and statistically using Shapiro-Wilk tests. I also extracted outlying examples of cores to ensure the despite the tissue area sampled varying, that the density measures of infiltrate were not significantly different from the population as a whole. Figure \ref{fig:heatmap} shows a heatmap comparing infiltration density across the CD8$^+$ , CD68$^+$ and CD45RO$^+$ TMAs. No spatial relationship was observed over a single TMA between the location of a core and the density of immune cells or the tissue area. 
+ \subsection{Data cleaning, quality assurance and spatial bias}
+
+One of the valuable things about analysing a large number of digitally imaged and segmented TMA cores is the ability to carry out quality checking for bias across TMAs and to evaluate the impact of and the variation in properties of the tissue core such as tissue area, something not measured by pathologists when assessing cores manually.
+
+I examined the distribution of tissue area and ensured that the varying tissue area across TMAs was random. I did this visually using heatmaps (Figure \ref{fig:heatmap_area}) and statistically using Shapiro-Wilk tests ($p > 0.05 $). 
 
 \begin{figure}
     \centering
-    \includegraphics{Chapter2/Figs/Raster/Thesis-heatmap.png}
-    \caption{Density of each infiltrate for each position in the SEARCH TMA.}
-    \label{fig:heatmap}
+    \includegraphics[width=0.8\textwidth]{Chapter2/Figs/Raster/area_heatmap.png}
+    \caption{Heatmap of total core area across TMA.}
+    \label{fig:heatmap_area}
 \end{figure}
+
+
+ 
+As mentioned, CD8+ and CD45RO+ counts were initially calculated as number of cells in stroma and epithelium and CD68+ scoring was given as area covered. I processed this raw data, converting cell counts into cells per unit area and CD68+ coverage into percentage area. This area normalization allows for comparison between cores and patients whose tumour tissue is made up of varying quantities of stroma and epithelium. 
+
+I also extracted outlying examples of cores to ensure the despite the tissue area sampled varying, that the measures of infiltrate density were not significantly different from the population as a whole. Figure \ref{fig:heatmap} shows a heatmap comparing infiltration density across the CD8$^+$ , CD68$^+$ and CD45RO$^+$ TMAs. No spatial relationship was observed over a single TMA between the location of a core and the density of immune cells or the tissue area. 
+
 
 
 \begin{figure}
@@ -139,15 +146,22 @@ As described in the methods, image analysis software (Definiens) was previously 
 
 
 
-I was interested in whether the percentage of tumour in a core was correlated with the \textit{p53} mutant allele fraction measured through sequencing for the patient. As p53 mutations are found ubiquitously in HGSOC tumour cells we expect the proportion of tumour in a sample to be correlated with p53 mutant allele fraction although the sequencing and sectioning are not carried out on exactly the same tumour region. I found them to be positively correlated ($R= 0.24$, $p=0.0027$). The correlation between technical replicates for allele frequency and sequencing depth is shown in Appendix \ref{fig:p53_allele}
-
-
+I was interested in whether the percentage of tumour in a core was correlated with the \textit{p53} mutant allele fraction measured through sequencing for the patient. As p53 mutations are found ubiquitously in HGSOC tumour cells we expect the proportion of tumour in a sample to be correlated with p53 mutant allele fraction although the sequencing and sectioning are not carried out on exactly the same tumour region. I found them to be positively correlated ($R= 0.24$, $p=0.0027$). The correlation between technical replicates for allele frequency and sequencing depth is shown in Appendix \ref{fig:p53_allele}. 
 \begin{figure}
     \centering
-    \includegraphics{Chapter2/Figs/Raster/Thesis-05.png}
+    \includegraphics{Chapter2/Figs/Raster/maf_epithelial.png}
     \caption{\textit{p53} mutant allele fraction against epithelial area of a core.}
     \label{fig:p53_allele}
 \end{figure}
+
+I also examined the mutant allele fraction across samples (Figure \ref{fig:maf_dist} to ensure that the samples were HGSOC and to investigate whether all samples were of high enough quality. Samples with mutant allele fraction of zero were resequenced and if no mutation was found were excluded from HGSOC analysis.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\textwidth]{Chapter2/Figs/Raster/MAF_distribution.png}
+    \caption{Histogram of counts of samples against mutant allele fraction.}
+    \label{fig:maf_dist}
+\end{figure}
+
 
 \subsection{Immune cell densities}
 
@@ -363,7 +377,7 @@ In order to evaluate the prognostic impact of these patterns of infiltration, I 
 \subsection{Are genetic defects associated with HGSOC driving individual infiltrates or the coordinated immune response in tumours?}
 
 \subsubsection*{Infiltrate density is not significantly associated with \textit{BRCA} status}
-To investigate the interactions between the TME and the genome, can ask whether a germline mutation in either of the \textit{BRCA1/2} genes results in changes in the TME and specifically the immune infiltrate. I investigated whether tumour, stroma or full core measures of CD8$^+$, CD45RO$^+$or CD68$^+$densities were related to \textit{BRCA1/2} mutations using the Kruskal-Wallis rank sum test. I compared the infiltrate density distributions between patients with no mutation, a mutation in \textit{BRCA1} and a mutation in \textit{BRCA2}. I found that the distributions of CD8$^+$, CD45RO$^+$and CD68$^+$infiltrates and the principal components were not significantly associated with \textit{BRCA} mutation status. This was unexpected as previous results have found increases in CD8$^+$infiltrate with a \textit{BRCA1} mutation\cite{Clarke2009}.
+To investigate the interactions between the TME and the genome, can ask whether a germline mutation in either of the \textit{BRCA1/2} genes results in changes in the TME and specifically the immune infiltrate. I investigated whether tumour, stroma or full core measures of CD8$^+$, CD45RO$^+$or CD68$^+$densities were related to \textit{BRCA1/2} mutations using the Kruskal-Wallis rank sum test. I compared the infiltrate density distributions between patients with no mutation, a mutation in \textit{BRCA1} and a mutation in \textit{BRCA2}. I found that the distributions of CD8$^+$, CD45RO$^+$and CD68$^+$infiltrates and the principal components were not significantly associated with \textit{BRCA} mutation status (Figure \ref{fig:genomic}). This was unexpected as previous results have found increases in CD8$^+$infiltrate with a \textit{BRCA1} mutation\cite{Clarke2009}.
 
 \subsubsection{Infiltrate density is not significantly associated with type of \textit{TP53} mutation.}
 Mutant P53 proteins have been linked to multiple micro-environmental changes\cite{Cordani2016}. I investigated whether the type of TP53 mutation produced measurable changes in the TME. Tumour, stroma or full core measures of CD8$^+$, CD45RO$^+$or CD68$^+$densities were compared between gain or loss of function mutations in \textit{TP53}. I used the Kruskal-Wallis rank sum test and found that the distribution of immune infiltrate was not significantly associated with type of \textit{TP53} mutation.
@@ -371,7 +385,16 @@ Mutant P53 proteins have been linked to multiple micro-environmental changes\cit
 \subsubsection{Infiltrate density is not significantly associated with change in PTEN expression.}
 Changes in PTEN expression are cell-intrinsic and levels of PTEN expression are prognostic in HGSOC\cite{RN17, RN15}. Tumour, stroma or full core measures of CD8$^+$, CD45RO$^+$ or CD68$^+$ densities were compared between patients with high or low PTEN expression as measured by both IHC and IF. Using the Kruskal-Wallis rank sum test I found that change in PTEN expression was not significantly associated with any change in the density of immune infiltrate. This particular cell-intrinsic change is not associated with a change in immune infiltration in our cohort.
 
-The presence of germline \texit{BRCA2} mutations was significantly associated with lower CD8$^+$ cell density than patients with a \texit{BRCA1} after multiple testing correction (Table 3). There was no significant association between the quantity of CD45RO$^+$ or CD68$^+$ infiltrate and the mutational status of either \texit{BRCA1} or \texit{BRCA2} genes (Table 3). No significant association was detected between TP53 GOF and LOF mutations or PTEN expression and the densities of CD8$^+$, CD45RO$^+$ and CD68$^+$ cells in epithelium or stroma (Table \ref{tab:}). Similarly, changes in the principal components were not significantly associated with PTEN expression, TP53 GOF or LOF mutation or germline \textit{BRCA1}/\texit{BRCA2} mutation status (Table \ref{tab:}). 
+The presence of germline \texit{BRCA2} mutations was significantly associated with lower CD8$^+$ cell density than patients with a \texit{BRCA1} after multiple testing correction (Figure \ref{fig:genomic}). There was no significant association between the quantity of CD45RO$^+$ or CD68$^+$ infiltrate and the mutational status of either \texit{BRCA1} or \texit{BRCA2} genes (Figure \ref{fig:genomic}) . No significant association was detected between TP53 GOF and LOF mutations or PTEN expression and the densities of CD8$^+$, CD45RO$^+$ and CD68$^+$ cells in epithelium or stroma (Table \ref{tab:}). Similarly, changes in the principal components were not significantly associated with PTEN expression, TP53 GOF or LOF mutation or germline \textit{BRCA1}/\texit{BRCA2} mutation status (Table \ref{tab:}). 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Chapter2/Figs/Raster/genomic.png}
+    \caption{Boxplots of Infiltrate distribution against genomic phenotype.}
+    \label{fig:genomic}
+    
+\end{figure}
+
 
 \begin{table}[]
     \centering
@@ -383,11 +406,13 @@ The presence of germline \texit{BRCA2} mutations was significantly associated wi
     \label{tab:my_label}
 \end{table}
 
+\subsection{Other ovarian cancer subtypes}
+
 \begin{figure}
     \centering
-    \includegraphics{distributions_immune}
-    \caption{Distribution of immune densities for each marker for different genometypes.}
-    \label{fig:immune_genome}
+    \includegraphics[width=0.8\textwidth]{Chapter2/Figs/Raster/Morphology_area.png}
+    \caption{Area of tumour and stroma across morphological subtypes.}
+    \label{fig:morph_area}
 \end{figure}
 
 \clearpage
@@ -406,5 +431,5 @@ Using quantitative data also allowed me to define a threshold for immune exclusi
 
 This work also finds no link between immune infiltration and germline \textit{BRCA} mutations, this is in part due to effects of cohort size. With approximately 20 patients with mutations, I am underpowered to ask multiple questions about the differences in immune infiltration between non-\textit{BRCA} and \textit{BRCA}-mutated patients.
 
-The exact spatial nature of immune infiltration when taking into account tumour structure is unknown. There may also be a link between stromal immune infiltration and collagen deposition. Comparison to infiltration which would be expected from diffusion alone has not been examined and these are key questions in the rest of this thesis.
+The exact spatial nature of immune infiltration when taking into account tumour structure is unknown. There may also be a link between stromal immune infiltration and collagen deposition. Comparisons of immune infiltration to that which would be expected from diffusion into the epithelium alone has not been examined and is a key questions in the rest of this thesis.
 

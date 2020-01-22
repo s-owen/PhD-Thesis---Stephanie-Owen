@@ -159,8 +159,20 @@ Where $N_{\mathrm{edge}}$ is the number of cells on the edge of an epithelial cl
     \label{fig:edge_cells}
 \end{figure}
 
-\subsubsection*{Clustering}
-I assessed multiple methods for clustering tissues, in terms of identifying groups of tissues I found that it was best to use DBSCAN, a density based clustering method. The results of other clustering methods are shown in \ref{fig:clust_bad}. An example of DBSCAN on serial H\&E and CK sections are show in Figure \ref{fig:dbclust}. These show very similar identifications of clusters across both samples.
+\subsubsection*{Entropy}
+In addition to the number of stromal and tumour clusters, I wanted to add entropy at multiple scales to the tissue features. Entropy can be understood as a measure of mixing and the formula for deriving entropy is given in Methods \ref{eq:entropy}. I hypothesised that given that tissue regions with mixed cell types would have a higher entropy than those without, that with multiscale area sampling, a reliable classification into tumours with mixing and without could be achieved. Figure \ref{fig:entropy} gives the mean entropy over 20 subsections of the image for matched H\&E and CK stained sections. This shows a moderate correlation. 
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter3/Figs/Thesis-06.png}
+    \caption{Shannon entropy derived for a H\&E and CK image of serial sections from the same patient core.}
+    \label{fig:entropy}
+\end{figure}
+
+\subsubsection*{Clustering with DBSCAN}
+I wanted to understand how cells clustered within a tissue, and to understand the overall composition of the core, is it one solid tissue section or does it have gaps and separations. This can also be understood as whether the tumour and stroma in the core are in multiple parts and whether they are separate or well mixed.
+
+I assessed multiple methods for clustering tissues and in terms of identifying different sizes and shapes of clusters of cells I found that it was best to use DBSCAN, a density based clustering method. An example of a results of another clustering method is shown in Figure \ref{fig:clust_bad}. K-nn clustering, for example, requires a pre-requisite number of clusters, a parameter that varies dramatically between tissue sections. K-nn is also an unsuitable method as when tissue sections comprise varying numbers within groups and varying spatial densities of cells, the method tends to split the cells equally into the pre-specified number of clusters, rather than recognising different sized clusters within.
 
 \begin{figure}
     \centering
@@ -169,10 +181,24 @@ I assessed multiple methods for clustering tissues, in terms of identifying grou
     \label{fig:clust_bad}
 \end{figure}
 
+
+The DBSCAN method requires two parameters, \textit{eps}, the distance within which two points are considered neighbours and \textit{minPts}, the minimum number of points in a cluster.
+
+I decided to only call clusters of at least 15 cells, in tissues making up over 1500 cells, I thought each cluster should contain at least 1\% of the cells. To derive the optimum \textit{eps} for clustering groups of cells on the tissue structure level, I plotted the $k^{th}$ neighbour distribution as discussed in et.al. for $k=10$. The \textit{eps} value obtained from these was 80-85 for Epithelium and Stroma. The larger value was used for clustering all cells. These plots for tumour and stroma and the eps cutoff from each are shown in Figure \ref{fig:eps}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Chapter3/Figs/Thesis-11.png}
+    \caption{10th nearest neighbour plotted against index, the optimal value for the eps is at the elbow of the curve. The eps was 80 for All cells, 82 for Tumour and 85 for Stroma.}
+    \label{fig:eps}
+\end{figure}
+
+An example of DBSCAN clustering on serial H\&E and CK sections is shown in Figure \ref{fig:dbclust}. These show visually accurate identifications of clusters across both samples. Distributions of the number of stroma, tumour and all cell clusters are shown in figure \ref{fig:dbscatter}.
+
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{Chapter3/Figs/dbscan_fullexample.png}
-    \caption{Examples of clusters of cells within tissue sections when epithelial, stromal cells are viewed separately and when all cells are clustered.}
+    \caption{Examples of clusters of cells generated with DBSCAN algorithm. Clusters generated from images of tissue sections when epithelial, stromal cells are viewed separately and when all cells are input.}
     \label{fig:dbclust}
 \end{figure}
 
@@ -183,26 +209,24 @@ I assessed multiple methods for clustering tissues, in terms of identifying grou
     \label{fig:dbscatter}
 \end{figure}
 
-\subsubsection*{Entropy}
-In addition to the number of stromal and tumour clusters, I wanted to add entropy at multiple scales to the tissue features. Entropy can be understood as a measure of mixing and the formula for deriving entropy is given in Methods \ref{eq:entropy}. I hypothesised that given that tissue regions with mixed cell types would have a higher entropy than those without, that with multiscale area sampling, a reliable classification into tumours with mixing and without could be achieved. Figure \ref{fig:entropy} gives the mean entropy over 20 subsections of the image for matched H\&E and CK stained sections. This shows a moderate correlation but. 
 
-\begin{figure}
-    \centering
-    \includegraphics{Chapter3/Figs/Thesis-06.png}
-    \caption{Shannon entropy derived for a H\&E and CK image of serial sections from the same patient core.}
-    \label{fig:entropy}
-\end{figure}
 
 \subsection{Morphology classification}
-Having reliably identified stromal and epithelial cells and identified subclusters and entropy of tissue I aimed to then classify tissue sections based upon these features into the morphological subtypes mentioned earlier.
+Having reliably obtained all the properties above, the quantity of stromal and epithelial cells, identified subclusters, entropy, density of tissue and surface area to volume ratio of the epithelium, I aimed to then investigate whether I could classify tissue sections based upon these features into some of the morphological subtypes mentioned earlier.
 
-In order to do this I labelled each tissue section as Solid, Glandular or Unknown.
+I categorized sections which were over 95\% stromal cells as stromal and didn't further categorize their structure. 
+
+The next classification we can make is to:
+
+Following this decision tree I classified each tissue section as Solid, Papillary Glandular, Desmoplastic/Cribriform or . 
+
 \begin{figure}
     \centering
     \includegraphics{}
     \caption{Histogram of the number of cases classified as solid, glandular, epithelial  or cribriform structure.}
     \label{fig:num_classl}
 \end{figure}
+
 
 \subsection{Relationship between Structure and Immune infiltration}
 
@@ -214,20 +238,23 @@ CD8 and FOXP3 were assessed in OV04 samples.
     \item Immune cells for different structures
 \end{itemize}
 
+\subsection{Structure and Survival}
+
 \subsection{Speed/Quantity model}
 
-\subsection{Immunofluorescence}
-In order to assess multiple immune markers on a single slide I decided to use Immunfluorescence, I worked with Jodi Miller (JM) from the core to arrange for an optimized panel to measure CD8, CD68 and nuclear stains simultaneously.
-The original suggestions were not successful on FFPE, with large amounts of Autofluorescence from FFPE section as well as overlapping spectra meaning signal could not be distinguished.
-
-Eventually we used DAPI, CD8 and CD68 to obtain a clear image of cells on the section. 
 
 \subsection{Collagen structure analysis}
-Second Harmonic Generation (SHG) uses harmonic wave generation by Collagen fibres to image. I used both IMC and SHG on the IF slide to analyse Collagen structure.
+Desmoplasia as mentioned in the previous morphology classification is the formation of fibrous stroma, one dense fibrous stroma component is Collagen. I used Second Harmonic Generation (SHG) to image Collagen on OV04 sections. SHG uses harmonic wave generation by Collagen fibres to image. Figure X shows plot of median collagen entropy and collagen energy for different classifications of tissue.
+
+\subsection{IMC Collagen Analysis?}
 
 \section{Discussion}
 
-
 In spite of multiple data sources implying a continuous distribution of densities of infiltration of immune cells into tumours, the literature still dichotimises immune infiltrate and even categorises a subclass of tumour structures as immune reactive, an approach which fails to interpret that differences in structure may influence the immune cells which can infiltrate and the rate at which they do.
 
-I found that the number of X was correlated with immune infiltrate. 
+In this chapter I automated the classification of tissue morphology for the first time. 
+
+
+I found that the tissue structure and surface area was correlated with immune infiltrate. 
+
+This is an insight into how the difference in infiltration we see in patients may be due to reorganization in the tissue. 

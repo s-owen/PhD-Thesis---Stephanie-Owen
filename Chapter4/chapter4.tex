@@ -70,6 +70,33 @@ Before analysing the interaction between these immune cells and these single pop
 \subsection{ICON7 summary}
 There were X patients.
 
+
+\subsection{Immunofluorescence combined with SHG}
+In order to assess multiple immune markers on a slide in combination with SHG I decided to use Immunofluorescence, I worked with Jodi Miller (JM) from the Institute core to create an optimized panel to measure CD8, CD68 and nuclear stains simultaneously as well as being able to image the Collagen in the ~450nm channel. We originally utilized DRAQ5 as a nuclear stain. As shown in Figure \ref{fig:IF_protos} the DRAQ5 successfully stained the nuclei but the FITC and Cy3 channels for the CD8+ and CD68+ marker combinations were not successful on FFPE. This was partly due to large amounts of autofluorescence from the FFPE section as well as overlapping FITC and Cy3 emission spectra meaning signal could not be easily distinguished. DAPI/Cy3/Cy5 staining was very clear and chosen for the rest of the imaging.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Chapter4/figs/Thesis-14.png}
+    \caption[Images from IF protocols.]{Images from IF protocols. (A) DRAQ5(Cy5), CD8+(FITC), CD68+(Cy3) (B)  DRAQ5(Cy5), CD8+(FITC), CD68+(Cy3)  (C) DAPI, CD8+(Cy3), CD68+(Cy5). CD68+ Macrophages, CD8+ cells and DAPI stained nuclei are very distinct and visible in protocol C.}
+    \label{fig:IF_protos}
+\end{figure}
+
+Eventually we used DAPI, CD8 and CD68 to obtain a clear image of cells on the section. 
+
+\subsection{IF and SHG combined}
+I excited the SHG at a slightly higher wavelength of 920nm in order to raise the wavelength of the emitted signal, this meant that the DAPI cells were not excited too strongly and the image was clear. As shown in figure \ref{fig:SHG_IF}. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{Chapter4/figs/Thesis-13.png}
+    \caption[Images measuring IF and SHG signal.]{ DAPI-blue, CD8+(Cy3)-cyan, CD68+(Cy5)-, SHG-red. CD68+ Macrophages, CD8+ cells and DAPI stained nuclei are very distinct and the fibres of collagen are visible in red. Imaged at 40x on SP5.}
+    \label{fig:SHG_IF}
+\end{figure}
+
+\subsubsection{Collagen structure analysis}
+Alongside the use of collagen to classify regions of the tumour and as a marker to identify cells as adjacent to collagen fibres, the collagen channel from IMC can be analysed in the same way as was done for the SHG imaging to analyse the structure and organization of the collagen fibres.
+
+I found that the coherency of the fibres was correlated with. 
+
 \subsection{IMC image analysis}
  IMC images contain hot pixels distributed randomly across the image, in order to clean the data, I carried out hot-spot removal in python using a median filter with a 3x3 pixel area (see Code \ref{script:1}).
  
@@ -111,7 +138,7 @@ I first investigated the correlation between numbers of CD3, CD8 and PD-1 positi
 
 \begin{figure}
     \centering
-    \includegraphics{Chapter4/figs/BRITROC_CD163_CD68_PD-1_corr.png}
+    \includegraphics[width=0.5\textwidth]{Chapter4/figs/BRITROC_CD163_CD68_PD-1_corr.png}
     \caption{CD163, CD68, PD-1}
     \label{fig:CD163_CD8_PD1}
 \end{figure}
@@ -125,7 +152,7 @@ I first investigated the correlation between numbers of CD3, CD8 and PD-1 positi
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{Chapter4/figs/Britroc_cell_correlation.png}
+    \includegraphics[width=0.5\textwidth]{Chapter2/Figs/Raster/correlation_britroc.png}
     \caption{Heatmap of correlations between number of cells positive for each marker.}
     \label{fig:britroc_corr_heat}
 \end{figure}
@@ -150,7 +177,8 @@ CD68 and CD163 are both macrophage markers.
 
 The area density of the immune infiltrates does not vary between, given that the nuclear 
 
-\subsection{Collagen structure analysis}
+
+
 
 \section{Discussion}
 The ability to measure collagen deposition, patterns of immune infiltration and hypoxia simultaneously on one slide have led to a much more in depth and concrete results on the intersection between these.
