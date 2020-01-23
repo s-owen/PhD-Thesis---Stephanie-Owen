@@ -55,7 +55,7 @@ The morphologies discussed by Lisio et al are solid architecture, glandular arch
 \subsection{Patient Characteristics}
 TMAs had been previously constructed from the CTCR-OV04 clinical studies, which were designed to collect imaging, blood, and tissue samples for exploratory biomarker studies. All patients provided written, informed consent for participation in these studies and for the use of their donated tissue, blood specimens, and anonymized data for the laboratory studies carried out. The CTCR-OV04 studies were approved by the Suffolk Local Research Ethics Committee (reference 05/Q0102/160) and Cambridgeshire Research Ethics Committee (reference 08/H0306/61).\cite{}
 
-The TMA previously constructed for this cohort contained 40 patients with HGSOC. 
+This cohort contained 40 patients with HGSOC. Samples were collected where possible for each patient from Normal Fallopian Tube, Malignant Ovary, Omentum and Metastasis. Two cores were extracted per tissue block where possible and two TMA blocks were constructed per tissue type.
 
 \begin{table}[]
     \centering
@@ -70,11 +70,9 @@ The TMA previously constructed for this cohort contained 40 patients with HGSOC.
 \end{table}
 
 
-
-
 \subsection{Cell classifier performance and comparison between H\&E and CK}
 
-Images of tissue sections stained with both H\&E and a CK7 marker were analysed. QuPath was used to segment nuclei based upon their optical density. Nuclei were then classified based upon features using a random forest based classifier. Cells were split randomly into a test and training data set. Examples of tissue classification on H\&E and CK stained images. Over 5000 cells from each TMA section were labelled and 70\% were used for training and 30\% were used for validation test sets. Confusion matrices for the H\&E and CK classifier are shown in Tables (\ref{tab:classifier_he} and \ref{tab:classifier_ck}). These show a very good performance by both classifiers. 
+Images of tissue sections stained with both H\&E and a CK7 marker were analysed. QuPath was used to segment nuclei based upon their optical density. Nuclei were then classified based upon size, shape and smoothed features using a random forest based classifier. Cells were split randomly into a test and training data set. Examples of tissue classification on H\&E and CK stained images. Over 5000 cells from each TMA section were labelled and 70\% were used for training and 30\% were used for validation test sets. Confusion matrices for the H\&E and CK classifier are shown in Tables (\ref{tab:classifier_he} and \ref{tab:classifier_ck}). These show a very good performance by both classifiers and show that such analysis could be carried across to H\&E images.
 
 
 \begin{figure}
@@ -92,10 +90,8 @@ Images of tissue sections stained with both H\&E and a CK7 marker were analysed.
     &   &   Stroma  &   Tumor\\
        \hline
 Classification&Stroma   &    1263    &     2\\
-&Tumor   &      2     &  346 \\
-         
+&Tumor   &      2     &  346 \\ \hline \\
     \end{tabular}
-    \caption[Confusion matrix for QuPath CK based classifier.]{Confusion matrix for QuPath CK based classifier. Classifier accuracy is 98.75\% (n=1613).}
     \label{tab:classifier_ck}
 \end{table}
 
@@ -109,13 +105,13 @@ Classification&Stroma   &    1263    &     2\\
 \hline
 Classification & Stroma	&  2653	 &   40\\
              & Tumor	 &   11	 & 2165\\
- \hline
+ \hline \\
     \end{tabular}
     \caption[Confusion matrix for QuPath H\&E based classifier.]{Confusion matrix for QuPath H\&E based classifier. Percentage of correctly classified objects in test set: 98.95\% (n=4869).}
     \label{tab:classifier_he}
 \end{table}
 
-The classifiers both perform well and as further validation across the image types, figure\ref{fig:correlation_tumourarea} shows that the percentage of epithelial cells in each image are strongly correlated, as would be expected from serial sections. 
+The classifiers both perform well and as further validation across the image types, figure\ref{fig:correlation_tumourarea} shows that the percentage of epithelial cells in each image are strongly correlated, as would be expected from serial sections. I observed that at least 1000 training cells were required to get a good classification across all images which naturally vary slightly in staining intensity and tissue texture.
 
 \begin{figure}
     \centering
@@ -124,29 +120,44 @@ The classifiers both perform well and as further validation across the image typ
     \label{fig:correlation_tumourarea}
 \end{figure}
 
-\subsection{High Grade Serous tissue structure analysis}
 
-In order to define a tissue structure of each core I selected several properties to examine and measure;
+\subsection{Metrics for tissue structure analysis}
+
+I was interested in being able to quantify the tissue structure of a sample and in order to define a tissue structure of each core I selected several possible metrics to define, examine and measure;
 
 \begin{itemize}
     \item Stroma/Tumour percentage
-    \item Surface Area: Volume ratio
+    \item Surface Area:Volume ratio of Epithelial regions
     \item Cellular entropy
     \item Number of clusters 
 \end{itemize}
 
-\subsubsection*{Stroma/Tumour percentage}
-This most basic measure of tissue composition was utilized in the previous chapter. In this chapter I measured this percentage as both an area and a number proportion for each image type. The distribution of epithelial cell percentages are shown in Figure \ref{fig:epi_percent}. As shown these overlap. 
+I aimed to derive these values and then compare these metrics between duplicate samples from a different region of the same tissue block and between different tissues from the same patient.
+
+\subsection{Stroma/Epithelium percentage}
+This most basic measure of tissue composition was utilized in the previous chapter. In this chapter I measured this percentage as both an area and a cell proportion for each image type. The distribution of epithelial cell percentages as derived from CK and H\&E images are shown in Figure \ref{fig:epi_percent}. The notches represent the approximate 95\% confidence interval around the median and as shown these overlap, meaning statistically these values could be drawn from the same distributions. 
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth]{Chapter3/Figs/boxplot_epithelium.png}
     \caption{Boxplots of the distribution of epithelial percentages in the OV04 cohort based upon H\&E and CK7 stained images}
-    \label{fig:epi_percentl}
+    \label{fig:epi_percent}
 \end{figure}
 
-\subsubsection*{Invasive front}
-In a purely diffusive model where immune infiltrate travels from the stroma into the epithelial nests, epithelial infiltrate would be proportional to the surface area of the epithelial nodules that are exposed to the surrounding stroma. In order to gain a measure of this surface area, I defined edge cells as those cells which had a nearest neighbour of a differing class. The surface area to volume ratio of a sphere is proportional to $\frac{1}{r}$ as is the ratio of a circumference to the area of a circle, as such the surface area of a nodule to its volume can be estimated as the following:
+\subsubsection{Comparison across same tissue section}
+\begin{figure}
+    \centering
+    \includegraphics{Chapter3/Figs/correlation_T_CK1_Ck2.png}
+    \caption{Correlation between epithelial percentage from sections of tissue cores from the same sample.}
+    \label{fig:epi_percent_2slides}
+\end{figure}
+
+\subsubsection{Comparison across different tissue sites}
+
+Omentum comparison
+
+\subsection{Quantifying the invasive front}
+In a purely diffusive model where immune infiltrate travels from the stroma into the epithelial nests, epithelial infiltrate would be proportional to the surface area of the epithelial nodules that are exposed to the surrounding stroma. In order to gain an approximation of this surface area, I defined edge cells as those cells which had a nearest neighbour of a differing class. The surface area to volume ratio of a sphere is proportional to $\frac{1}{r}$ as is the ratio of a circumference to the area of a circle, as such the surface area of a nodule to its volume can be estimated as the following:
 
 \[\frac{SA}{Vol} ~ \frac{(N_{\mathrm{edge}})} {(N_{\mathrm{epi}})}\]
 
@@ -159,7 +170,31 @@ Where $N_{\mathrm{edge}}$ is the number of cells on the edge of an epithelial cl
     \label{fig:edge_cells}
 \end{figure}
 
-\subsubsection*{Entropy}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Chapter3/Figs/}
+    \caption{The distribution of edge cells as a percentage of epithelial cells.}
+    \label{fig:edge_cells}
+\end{figure}
+
+
+\subsubsection{Comparison across same tissue section}
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
+\subsubsection{Comparison across different tissue sites}
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
+
+
+\subsection{Entropy}
 In addition to the number of stromal and tumour clusters, I wanted to add entropy at multiple scales to the tissue features. Entropy can be understood as a measure of mixing and the formula for deriving entropy is given in Methods \ref{eq:entropy}. I hypothesised that given that tissue regions with mixed cell types would have a higher entropy than those without, that with multiscale area sampling, a reliable classification into tumours with mixing and without could be achieved. Figure \ref{fig:entropy} gives the mean entropy over 20 subsections of the image for matched H\&E and CK stained sections. This shows a moderate correlation. 
 
 \begin{figure}
@@ -216,7 +251,19 @@ Having reliably obtained all the properties above, the quantity of stromal and e
 
 I categorized sections which were over 95\% stromal cells as stromal and didn't further categorize their structure. 
 
-The next classification we can make is to:
+I decided to select a training set of sections which could easily be classified into the morphologies mentioned by Murakami et. al.  These were ABC. 
+
+Training samples: x,y,z
+
+I compared the metrics measured earlier between these tissue morphologies as shown in Figure \ref{fig:morph_edge}
+
+\begin{figure}
+    \centering
+    \includegraphics{Chapter4/figs/percent_edge.png}
+    \caption{Boxplot of the distribution of edge cells for different morphologies.}
+    \label{fig:morph_edge}
+\end{figure}
+
 
 Following this decision tree I classified each tissue section as Solid, Papillary Glandular, Desmoplastic/Cribriform or . 
 
@@ -240,7 +287,7 @@ CD8 and FOXP3 were assessed in OV04 samples.
 
 \subsection{Structure and Survival}
 
-\subsection{Speed/Quantity model}
+\subsection{Diffusive infiltration model}
 
 
 \subsection{Collagen structure analysis}
@@ -252,9 +299,7 @@ Desmoplasia as mentioned in the previous morphology classification is the format
 
 In spite of multiple data sources implying a continuous distribution of densities of infiltration of immune cells into tumours, the literature still dichotimises immune infiltrate and even categorises a subclass of tumour structures as immune reactive, an approach which fails to interpret that differences in structure may influence the immune cells which can infiltrate and the rate at which they do.
 
-In this chapter I automated the classification of tissue morphology for the first time. 
+In this chapter I attempted to automate the classification of tissue morphology using texture features and collagen imaging.
 
 
-I found that the tissue structure and surface area was correlated with immune infiltrate. 
 
-This is an insight into how the difference in infiltration we see in patients may be due to reorganization in the tissue. 

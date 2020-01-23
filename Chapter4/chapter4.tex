@@ -13,11 +13,14 @@
 
 
 \section[Introduction]{Introduction}
+Having explored the tissue structure and its relation to CD8 and FOXP3 infiltrate. I found that a measure of surface area to volume ratio was correlated with quantity of FOXP3 infiltrate. This implies that on some level the structural layout of a tissue is related to the amount of contact of immune cells with the epithelium.
 
-As mentioned in the introduction, some methods of immune analysis are capable of measuring many more markers on a single section than standard IHC and IF. IMC is one of the best of such methods, allowing for measuring more than 20 markers on a single tissue section by conjugating antibodies with metal isotopes. This method allowed me to view additional markers for microenvironmental features such as collagen and hypoxia alongside a panel of immune markers that had been investigated in other samples. In order to investigate the micro-environment in both epithelium and the tumour-adjacent stroma I used the BriTROC and ICON7 cohorts to investigate this.
+As mentioned in the introduction, some methods of immune analysis are capable of measuring many more markers on a single section than standard IHC and IF. IMC is one of the best of such methods, allowing for measuring more than 20 markers on a single tissue section by conjugating antibodies with metal isotopes. This method allowed me to view additional markers for microenvironmental features such as collagen and hypoxia alongside a panel of immune markers that included the ones that had been investigated in previous chapters. In order to investigate the micro-environment in both epithelium and the tumour-adjacent stroma I used the BriTROC and ICON7 cohorts to investigate this.
+
+The 
 
 \subsection{History of the project and roles}
-Sarwah Al-Khalidi originally intended to create an IMC panel for immune markers alone, I worked with SAK to include collagen in order to both better delineate stroma tissues from epithelium and investigate the structure of collagen and its interaction with immune cells. Sarwah Al-Khalidi (SAK) carried out the panel optimization and staining on the BriTROC cohort and arranged for Fatime Cosaj(FC) to carry out the staining with the same panel on the ICON7 cohort using the same protocols as optimized by SAK. I arranged for Richard Grenfell (RG) to carry out the imaging of the stained ICON7 slides on the same machine as the BRITROC cohort had been done.
+Sarwah Al-Khalidi originally intended to create an IMC panel for immune markers alone, I worked with SAK to include collagen in order to both better delineate stroma tissues from epithelium and investigate the structure of collagen and its interaction with immune cells. Sarwah Al-Khalidi (SAK) carried out the panel optimization and staining on the BriTROC cohort. I arranged for Fatime Cosaj(FC) to carry out the staining with the same panel on the ICON7 cohort using the same protocols as optimized by SAK. I arranged for Richard Grenfell (RG) of the Institute core to carry out the imaging of the stained ICON7 slides on the same machine as the BRITROC cohort had been done.
 
 From the markers included in the IMC panel, the subset of these of markers that I was interested in were;
 \begin{itemize}
@@ -50,7 +53,7 @@ ICON7 was an international, phase 3, open-label, randomised trial undertaken at 
 ICON7 had cores sampled specifically from Epithelium and adjacent stroma, making it ideal for measurement of the microenvironment and measurement of both tumour and stroma in a single section which had been limited to a subset of the patients in previous cohorts.
 
 \subsection{Immuno Metal Conjugation}
-The protocol for IMC staining and imaging was carried out as described in Section \ref{sec:sarwah_staining}.
+The protocol for IMC staining and imaging was carried out by SAK/FC as described in Section \ref{sec:sarwah_staining}.
 
 \subsection{Marker Panel}
 The marker panel is specified in section \ref{table:imc_antibodies} and I worked with SAK to include Collagen in this panel for further investigation alongside the immune populations. 
@@ -60,10 +63,13 @@ The marker panel is specified in section \ref{table:imc_antibodies} and I worked
 Staining and imaging of the BriTROC panel was carried out by SA-K. Staining and imaging of the ICON7 TMAs was carried out by Fatime Cosaj(FC) and Richard Grenfell(RG) accordingly.
 
 \subsection{Image Analysis}
-Python was used for data cleaning and Halo was used for the subsequent analysis of IMC data files. Structure analysis of signal in the collagen channel was carried out with Imagej and the GLCM, Orientationj and Directionality plugins. 
+Python was used for data cleaning and Halo was used for the subsequent analysis of the IMC data files. Structure analysis of signal in the collagen channel was carried out with Imagej and the GLCM, Orientationj and Directionality plugins. 
 
 
 \section{Results}
+
+As
+
 Before analysing the interaction between these immune cells and these single populations on single tissue sections, I investigated the characteristics of the BriTROC and ICON7 cohorts are shown.
 
 \subsection{BriTROC summary}
@@ -157,7 +163,15 @@ I first investigated the correlation between numbers of CD3, CD8 and PD-1 positi
     \label{fig:britroc_corr_heat}
 \end{figure}
 
-Figures \ref{fig:britroc_corr_scatt} and \ref{fig:britroc_corr_heat} show the correlations between the number of CD8+, CD68+, CA9, CK7, Collagen1, CD45RO, CD56 and Ki-67+ cells. CD8, CD68 and CD45RO, the populations investigated in Chapter 1, show the strongest positive correlations. I also see the negative correlation we would expect between the number of Collagen and Cytokeratin positive cells as these cells are mutually exclusive and determine the majority of the structure of a tissue. Despite seeing a higher density of infiltrate in stromal regions in earlier chapters, we see a negative correlation between the number of collagen positive cells and the number of immune cells in these samples.
+Figures \ref{fig:britroc_corr_scatt} and \ref{fig:britroc_corr_heat} show the basic correlations between the number of CD8+, CD68+, CA9, CK7, Collagen1, CD45RO, CD56 and Ki-67+ cells in the BRITROC TMA. CD8, CD68 and CD45RO, the populations investigated in Chapter 1, show the strongest positive correlations. I also see the negative correlation we would expect between the number of Collagen and Cytokeratin positive cells as these cells are mutually exclusive and determine the majority of the structure of a tissue. Despite seeing a higher density of infiltrate in stromal regions in earlier chapters, we see a negative correlation between the number of collagen positive cells and the number of immune cells in these samples.
+
+
+\subsection{Collagen deposition and hypoxia}
+CA9 expression predominantly occurs in epithelial cells and given the negative correlation between epithelial cell quantity and collagen,  I normalised the CA9 positive cells as a percentage of total epithelial cells. 
+
+I found no correlation between the percentage of epithelium positive for CA9 staining and the area Collagen weak or strong staining. 
+
+
 
 \subsection{Principal Component Analysis}
 In order to carry out a meaningful analysis across such a large number of measurements in multiple tissue regions, I used principal component analysis as in Chapter 2 in order to examine the patterns across the immune infiltrates. 
@@ -166,7 +180,7 @@ In order to carry out a meaningful analysis across such a large number of measur
 
 \subsubsection{Macrophages}
 
-CD68 and CD163 are both macrophage markers. 
+CD68 and CD163 are both macrophage markers and macrophages are associated with collagen remodelling. I assessed the difference in the quantity of these macrophages across different strengths of collagen staining and the epithelium. I found no difference between the density of macrophage infiltration of collagen and epithelium.
 
 \begin{figure}
     \centering
@@ -181,6 +195,4 @@ The area density of the immune infiltrates does not vary between, given that the
 
 
 \section{Discussion}
-The ability to measure collagen deposition, patterns of immune infiltration and hypoxia simultaneously on one slide have led to a much more in depth and concrete results on the intersection between these.
-Survival analysis showed that. 
-
+I utilised the multi-marker method of IMC on sections of tissue from BRITROC and ICON7. Investigating the relationship between infiltration of immune cells and the presence of hypoxia and structure.
