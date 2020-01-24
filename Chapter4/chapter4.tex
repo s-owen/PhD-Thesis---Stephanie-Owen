@@ -36,6 +36,8 @@ From the markers included in the IMC panel, the subset of these of markers that 
     \label{fig:ch5_visualabstract}
 \end{figure}
 
+
+
 \section[Methodology]{Methodology}
 \subsection{Cohort Summary}
 \subsubsection{BriTROC} Samples were collected previous to this PhD under the British Translational Research Ovarian Cancer Collaborative (BriTROC), a non-randomised prospective study enrolling patients with recurrent HGSOC\cite{}.  Figure \ref{fig:BriTROC_remark} shows the REMARK diagram for this cohort. A total of 446 diagnostic samples were collected from 276 patient with relapsed HGSOC. 247 samples from 172 patients had enough material to generate a tissue microarray (TMA) for immunohistochemistry staining. Three 1mm cores from the tumour area of each sample were marked on H&E-stained slides by a pathologist, and used by Darren Ennis to make a tissue microarray (TMA) of the samples.
@@ -131,35 +133,35 @@ In order to validate the tissue and cell classification of the IMC, I used multi
 
 The BRITROC cohort composed 3 TMAs in triplicate, I decided to use the first TMA in order to do an exploratory analysis for hypothesis generation. I would then be able to test the statistical significance of such hypotheses on both the other two TMAs and the ICON7 cohort. 
 
-The first exploratory investigation of this dataset was to investigate the correlations between immune populations to validate the results found in earlier chapters and to build up a picture of which features of the micro-environment are connected.
+The first investigation of this dataset was to investigate the correlations between immune populations to validate the results found in earlier chapters and to build up a picture of which features of the micro-environment are connected.
 
 I first investigated the correlation between numbers of CD3, CD8 and PD-1 positive cell areas in samples.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth]{Chapter4/figs/BRITROC_CD3_CD8_PD-1_corr.png}
-    \caption{CD3, CD8, PD-1}
+    \caption[Correlation between markers of T-cell subsets CD3, CD8, PD-1]{Correlation between markers of T-cell subsets CD3, CD8, PD-1 are shown. Scatterplots in lower left, distributions (log10 transformed) along the diagonal. Pearson R in top right. Strong correlations are observed between all 3.}
     \label{fig:CD8_CD3_PD1}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth]{Chapter4/figs/BRITROC_CD163_CD68_PD-1_corr.png}
-    \caption{CD163, CD68, PD-1}
+    \caption[Correlation between markers of macrophage subsets CD68, CD163 and PD-1]{Correlation between markers of macrophage subsets CD68, CD163 and PD-1 are shown. Scatterplots in lower left, distributions (log10 transformed) along the diagonal. Pearson R in top right. Strong correlations are observed between all CD163, CD68, PD-1.}
     \label{fig:CD163_CD8_PD1}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics{Chapter4/figs/Britroc_cell_correlation2.png}
-    \caption{Scatterplots of correlations between number of cells positive for each marker.}
+    \caption[Investigating the correlations between cells of each marker in IMC data.]{Investigating the correlations between cells of each marker. Pearson correlation coefficient is given along the top right. Distributions of each infiltrate(log10 transformed) are given down the diagonal. Scatterplots of correlations between number of cells positive for each marker.}
     \label{fig:britroc_corr_scatt}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth]{Chapter2/Figs/Raster/correlation_britroc.png}
-    \caption{Heatmap of correlations between number of cells positive for each marker.}
+    \caption[Heatmap of correlations between number of cells positive for each marker]{Heatmap of correlations between number of cells positive for each marker. Correlations are seen between CD45RO, CD68 and CD8 cells and negative correlations between collagen and most immune cells.}
     \label{fig:britroc_corr_heat}
 \end{figure}
 
@@ -185,11 +187,11 @@ CD68 and CD163 are both macrophage markers and macrophages are associated with c
 \begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{Chapter4/figs/Thesis-10.png}
-    \caption{Distribution of densities of CD68+ and CD163+ cells in the dense collagen, loose collagen and epithelial regions of the tumour section.}
+    \caption{Distribution of densities of CD68+ and CD163+ cells in the dense collagen, loose collagen and epithelial regions of the tumour section. There was no significant difference in CD163+ infiltrate between regions. Significantly higher CD68+ density was seen in Tumour Epithelium than Dense collagen (p=).}
     \label{fig:distribution}
 \end{figure}
 
-The area density of the immune infiltrates does not vary between, given that the nuclear 
+The area density of the CD163+ infiltrate does not vary between regions but CD68+ infiltrate is excluded from dense collagen.
 
 
 

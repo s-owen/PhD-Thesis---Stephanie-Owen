@@ -252,15 +252,15 @@ CD45RO$^+$ stroma	&	0.07	&	0.016	&	0.002	\\
 \hline
 
     \end{tabular}
-    \caption{P-values for the association of each functional form of the variable to survival using univariable Cox regression analyses. Lowest p-values demonstrate most likely functional form and show that each relationship is approximately log linear}
+    \caption[P-values for the association of each functional form of the variable with survival]{P-values for the association of each functional form of the variable with survival using univariable Cox regression analyses. Lowest p-values demonstrate most likely functional form and show that each relationship is approximately log linear}
     \label{tab:model_fit}
 \end{table}
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{Chapter2/Figs/Raster/modelfit_2-08.png}
-    \caption[Residuals of model fit]{Residuals of model fit plotted against predicted value for log-transformed immune variables and age at diagnosis. All relationships were found to be approximately linear.}
-    \label{fig:modelfit}
+    \includegraphics[width=\textwidth]{Chapter2/Figs/Raster/Artboard 39.png}
+    \caption[Residuals of model fit]{Residuals of model fit plotted against predicted value for age at diagnosis, the relationship was found to be approximately linear.}
+    \label{fig:model_age}
 \end{figure}
 
 
@@ -380,7 +380,7 @@ CD68	&	211	&	1.53	&	0.09	&	1.54	&	0.018	\\
 \end{table}
 There is no significant effect on survival of stroma:tumour ratio for the T-cell subsets. The ratio of tumour:stroma macrophages however has an impact upon survival, with a higher epithelial:stromal infiltration ratio having a negative impact upon survival (Table \ref{tab:s:t}, $p=0.018, \mathrm{HR}=1.54$).
 
-\subsection{Principal components of the combined immunospace describe biologically interpret-able effects.}
+\subsection{Principal components and the combined immunospace}
  Part of the problem that I encountered in analysing the effect of multiple immune populations upon survival is that the multiple immune infiltrates are correlated (see Figure \ref{fig:ch2_correlation}) and may have additive or suppressive effects.  In order to assess the multi-dimensional nature of the immune response in more detail I proposed that as the three types of immune infiltrate vary continuously across epithelium and stroma these variables can be regarded as six dimensions of an ‘immunospace’ (three infiltrates, 2 localizations).  Given the strong correlations between infiltrates (Figure \ref{fig:ch2_correlation}), we can safely say these immune variables are not independent. I used principal component analysis (PCA) to determine the independent patterns across these dimensions, using the 152 patients for whom complete data were available.
  
  PCA transformed the six correlated infiltrate variables into six independent axes with the first component containing the largest proportion of variance (60\%) in the data set\ref{tab:PC}. Patients are plotted by their PC1 and PC2 values in Figure \ref{fig:PC_plot}. In principal component 1 (PC1), the weightings of all immune infiltrates are positive and similar in magnitude (Table \ref{tab:PC}). This indicates that as one infiltrate increases so do all the others and represents the degree of coordinated immune response. The remaining principal components characterize additional patterns across immune infiltrates independent of PC1. The additive contribution of PC2 characterises negative correlation between CD8$^+$ infiltrates and CD68$^+$ macrophages and CD45RO$^+$ memory cells. PC3 characterizes additional variation where epithelial and stromal infiltrates are negatively correlated, the most positive values of PC3 correspond to high infiltration in tumour epithelium compared to stroma and the most negative values of PC3 correspond to the opposite, the aforementioned immune exclusion. 
